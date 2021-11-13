@@ -1,26 +1,23 @@
 # This Python file uses the following encoding: utf-8
-import os
-from pathlib import Path
 import sys
 
-from PySide2.QtWidgets import QApplication, QMainWindow
-from PySide2.QtCore import QFile
-from PySide2.QtUiTools import QUiLoader
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5 import uic
 
-
+from openfile import OpenFileWindow
+from history import HistoryWindow
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.load_ui()
+        self.openfile = OpenFileWindow(self)
+        self.actionUpload_file.triggered.connect(self.openfile.open)
+        self.history = HistoryWindow()
+        self.actionShow_History.triggered.connect(self.history.open)
+        self.actionUpload_file_2.triggered.connect(self.openfile.open)
 
     def load_ui(self):
-        loader = QUiLoader()
-        path = os.fspath(Path(__file__).resolve().parent / "form.ui")
-        ui_file = QFile(path)
-        ui_file.open(QFile.ReadOnly)
-        loader.load(ui_file, self)
-        ui_file.close()
-
+        uic.loadUi('mainwindow.ui', self)
 
 if __name__ == "__main__":
     app = QApplication([])
