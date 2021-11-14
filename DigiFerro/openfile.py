@@ -22,4 +22,5 @@ class OpenFileWindow(QDialog):
         self.lineEdit.setText(fileName[0])
 
     def ok(self):
+        self.hide()
         image(self.lineEdit.text()).show(self.parent.label)
