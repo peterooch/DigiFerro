@@ -11,6 +11,7 @@ class OpenFileWindow(QDialog):
         self.load_ui()
         self.pushButton.clicked.connect(self.browse)
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
+
     def load_ui(self):
         uic.loadUi('openfile.ui', self)
 

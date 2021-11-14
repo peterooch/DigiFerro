@@ -6,13 +6,14 @@ from PyQt5 import uic
 
 from openfile import OpenFileWindow
 from history import HistoryWindow
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.load_ui()
         self.openfile = OpenFileWindow(self)
+        self.history = HistoryWindow(self)
         self.actionUpload_file.triggered.connect(self.openfile.open)
-        self.history = HistoryWindow()
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.openfile.open)
 
