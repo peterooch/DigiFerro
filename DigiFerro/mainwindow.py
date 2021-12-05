@@ -16,6 +16,9 @@ class MainWindow(QMainWindow):
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.openfile.open)
+        self.analyzeButton.clicked.connect(self.openfile.open)
+        self.setMinimumWidth(900)
+        self.setMinimumHeight(700)
 
     def load_ui(self):
         uic.loadUi('mainwindow.ui', self)
