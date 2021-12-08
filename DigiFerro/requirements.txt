@@ -1,4 +1,4 @@
 opencv-python
-pyqt
+PyQt5
 numpy
 pandas

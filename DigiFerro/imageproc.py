@@ -1,16 +1,14 @@
 import cv2
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
-import shutil
+import numpy as np
 
 class image():
     def __init__(self, image_path):
-        try:
-            shutil.copyfile(image_path, 'image.jpg')
-        except shutil.SameFileError:
-            pass
+        with open(image_path, 'rb') as file:
+            image_bytes = file.read()
 
-        self.img = cv2.imread('image.jpg', cv2.IMREAD_COLOR)
+        self.img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
     def show(self, label):
         self.img = cv2.resize(self.img, (800, 600))
         label.setGeometry(20, 20, self.img.shape[1], self.img.shape[0])

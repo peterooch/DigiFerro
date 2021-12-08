@@ -55,6 +55,7 @@
      <string>File</string>
     </property>
     <addaction name="actionUpload_file"/>
+    <addaction name="actionShow_Graph"/>
    </widget>
    <widget class="QMenu" name="menuHistory">
     <property name="title">
@@ -100,6 +101,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionShow_Graph">
+   <property name="text">
+    <string>DEMO: Show Graph</string>
    </property>
   </action>
  </widget>
