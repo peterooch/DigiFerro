@@ -3,7 +3,6 @@ from PyQt5 import uic
 
 from imageproc import image
 
-
 class OpenFileWindow(QDialog):
     def __init__(self, parent):
         super(OpenFileWindow, self).__init__(parent)
@@ -11,6 +10,7 @@ class OpenFileWindow(QDialog):
         self.load_ui()
         self.pushButton.clicked.connect(self.browse)
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
+        self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
 
     def load_ui(self):
         uic.loadUi('openfile.ui', self)
@@ -25,3 +25,6 @@ class OpenFileWindow(QDialog):
     def ok(self):
         self.hide()
         image(self.lineEdit.text()).show(self.parent.label)
+    
+    def cancel(self):
+        self.hide()
