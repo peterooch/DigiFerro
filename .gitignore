@@ -131,3 +131,6 @@ dmypy.json
 # Custom
 *.pyproject.user*
 .qt_for_python/
+
+data
+*.v2
