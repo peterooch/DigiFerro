@@ -2,14 +2,18 @@ import os
 import sys
 
 import numpy as np
-from encoder import json_to_img
-from transform import augmentation
 #from model import get_model
 from joblib import dump
+import cv2
+import shutil
+
+from constants import SPLIT_SIZE
+from encoder import json_to_img
+from transform import augmentation
 
 old_cwd = os.getcwd()
 
-def create_data(label_path):
+def create_data(label_path, dest_path=None):
     os.chdir(label_path)
     dataset = [json_to_img(entry) for entry in os.listdir('.') if '.json' in entry]
     augmented = [augmentation(entry) for entry in dataset]
@@ -19,13 +23,12 @@ def create_data(label_path):
     Y = []
     #model = get_model()
 
-    input_shape  = (512, 512)
+    input_shape  = SPLIT_SIZE
     #output_shape = (760, 568)
 
     #os.makedirs('blocks/x', exist_ok=True)
     #os.makedirs('blocks/y', exist_ok=True)
 
-    c = 0
     for entry in dataset:
         x_img = entry.source
         y_img = entry.target
@@ -46,14 +49,28 @@ def create_data(label_path):
                 Y.append(y)
                 #cv2.imwrite(f'blocks/x/{c}.png', x)
                 #cv2.imwrite(f'blocks/y/{c}.png', y)
-                c += 1
             prev_a = a
 
     X = np.array(X)
     Y = np.array(Y)
     os.chdir(old_cwd)
+    shutil.rmtree(dest_path, ignore_errors=True)
+    os.makedirs('data')
     dump((X, Y), "data/data.pkl", compress=3)
-    #model.fit(X, Y, batch_size=1)
+
+    os.makedirs(f'{dest_path}/transformed')
+    for i, (image, _) in enumerate(dataset):
+        cv2.imwrite(f'{dest_path}/transformed/{i}.jpg', image)
+
+    if dest_path is not None:
+        os.makedirs(f'{dest_path}/images')
+        os.makedirs(f'{dest_path}/masks')
+        for i, (image, mask) in enumerate(zip(X, Y)):
+            cv2.imwrite(f'{dest_path}/images/{i}.png', image)
+            cv2.imwrite(f'{dest_path}/masks/{i}.png', mask)
 
 if __name__ == "__main__":
-    create_data(sys.argv[1])
+    if len(sys.argv) > 2:
+        create_data(sys.argv[1], sys.argv[2])
+    else:
+        create_data(sys.argv[1])
