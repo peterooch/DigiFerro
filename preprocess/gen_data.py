@@ -17,7 +17,7 @@ def create_data(label_path, dest_path=None):
     os.chdir(label_path)
     dataset = [json_to_img(entry) for entry in os.listdir('.') if '.json' in entry]
     augmented = [augmentation(entry) for entry in dataset]
-    dataset += augmented
+    #dataset += augmented
 
     X = []
     Y = []
@@ -58,9 +58,16 @@ def create_data(label_path, dest_path=None):
     os.makedirs('data')
     dump((X, Y), "data/data.pkl", compress=3)
 
+    RED_LOWER = np.uint8([0, 0, 200])
+    RED_UPPER = np.uint8([255, 255, 255])
+
     os.makedirs(f'{dest_path}/transformed')
     for i, (image, _) in enumerate(dataset):
         cv2.imwrite(f'{dest_path}/transformed/{i}.jpg', image)
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        cv2.imwrite(f'{dest_path}/transformed/{i}_hsv.jpg', hsv)
+        mask = cv2.inRange(hsv, RED_LOWER, RED_UPPER)
+        cv2.imwrite(f'{dest_path}/transformed/{i}_mask.jpg', mask)
 
     if dest_path is not None:
         os.makedirs(f'{dest_path}/images')

@@ -23,4 +23,5 @@ def json_to_img(json_path):
     orig_img = load_image(obj["imagePath"])
 
     matched = np.uint8(match_histograms(orig_img, baseline))
+
     return DataEntry(matched, img)
