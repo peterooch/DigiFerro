@@ -12,11 +12,7 @@ SPALLING_UPPER = np.uint8([255, 255, 255])
 # Histogram baseline image
 BASELINE = cv2.imread('preprocess/baseline.jpg')
 
-def create_mask(file_name):
-    with open(file_name, 'rb') as file:
-        image_bytes = file.read()
-
-    img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+def create_mask(img):
     img = np.uint8(match_histograms(img, BASELINE))
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, SPALLING_LOWER, SPALLING_UPPER)
@@ -38,5 +34,10 @@ def contour_dims(mask) -> List[float]:
     return sorted(dims, reverse=True)
 
 if __name__ == "__main__":
-    mask = create_mask('preprocess/baseline.jpg')
+    with open('preprocess/baseline.jpg', 'rb') as file:
+        image_bytes = file.read()
+
+    img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+
+    mask = create_mask(img)
     print(contour_dims(mask))

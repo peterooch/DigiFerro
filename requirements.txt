@@ -4,4 +4,4 @@ numpy
 pandas
 matplotlib
 #tensorflow
-skimage
+scikit-image

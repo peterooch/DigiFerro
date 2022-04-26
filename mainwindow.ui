@@ -40,6 +40,19 @@
      <string>Analyze Image</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="fragmentButton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>0</y>
+      <width>110</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Fragments</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

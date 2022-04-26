@@ -24,7 +24,9 @@ class OpenFileWindow(QDialog):
 
     def ok(self):
         self.hide()
-        image(self.lineEdit.text()).show(self.parent.label)
+        img = image(self.lineEdit.text())
+        self.parent.set_image(img)
+        self.parent.show_image()
     
     def cancel(self):
         self.hide()
