@@ -7,6 +7,7 @@ from PyQt5 import uic
 from imageproc import image
 from openfile import OpenFileWindow
 from history import HistoryWindow, History
+from util import resource_path
 #from graph import GraphWindow
 
 class MainWindow(QMainWindow):
@@ -38,7 +39,7 @@ class MainWindow(QMainWindow):
         self.img.show(self.label, param)
 
     def load_ui(self):
-        uic.loadUi('mainwindow.ui', self)
+        uic.loadUi(resource_path('mainwindow.ui'), self)
 
     def load_history(self):
         fileName = QFileDialog.getOpenFileName(self)

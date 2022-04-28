@@ -2,6 +2,8 @@ opencv-python
 PyQt5
 numpy
 pandas
+openpyxl
 matplotlib
 #tensorflow
 scikit-image
+pyinstaller

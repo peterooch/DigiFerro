@@ -6,6 +6,8 @@ from PyQt5.QtGui import QPixmap, QImage
 import matplotlib.pyplot as plt
 import numpy as np
 
+from util import resource_path
+
 class GraphWindow(QDialog):
     def __init__(self, parent, graph=None):
         super(GraphWindow, self).__init__(parent)
@@ -37,7 +39,7 @@ class GraphWindow(QDialog):
         self.label.setPixmap(QPixmap.fromImage(qimg))
 
     def load_ui(self):
-        uic.loadUi('graph.ui', self)
+        uic.loadUi(resource_path('graph.ui'), self)
     
     def open(self):
         self.show()

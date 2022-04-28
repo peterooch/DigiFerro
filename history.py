@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QDialog, QTableWidget, QTableWidgetItem
 from PyQt5 import uic
 import pandas as pd
 
+from util import resource_path
+
 DATE_COL = 0
 SAMPLEID_COL = 1
 SAMPLEDATE_COL = 2
@@ -40,7 +42,7 @@ class HistoryWindow(QDialog):
         self.selectButton.clicked.connect(self.part_selected)
 
     def load_ui(self):
-        uic.loadUi('history.ui', self)
+        uic.loadUi(resource_path('history.ui'), self)
 
     def open(self):
         if self.history is not None and len(self.partnums) == 0:

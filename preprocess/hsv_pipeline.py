@@ -5,12 +5,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.exposure import match_histograms
 
+from util import resource_path
+
 # Spalling fragment hsv range
 SPALLING_LOWER = np.uint8([0, 0, 200])
 SPALLING_UPPER = np.uint8([255, 255, 255])
 
 # Histogram baseline image
-BASELINE = cv2.imread('preprocess/baseline.jpg')
+BASELINE = cv2.imread(resource_path('preprocess/baseline.jpg'))
 
 def create_mask(img):
     img = np.uint8(match_histograms(img, BASELINE))

@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5 import uic
 
 from imageproc import image
+from util import resource_path
 
 class OpenFileWindow(QDialog):
     def __init__(self, parent):
@@ -13,7 +14,7 @@ class OpenFileWindow(QDialog):
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
 
     def load_ui(self):
-        uic.loadUi('openfile.ui', self)
+        uic.loadUi(resource_path('openfile.ui'), self)
 
     def open(self):
         self.show()
