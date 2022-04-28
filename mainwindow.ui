@@ -53,6 +53,32 @@
      <string>Show Fragments</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="originalButton">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>0</y>
+      <width>110</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Original</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="graphButton">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>0</y>
+      <width>110</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Distribution</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -68,7 +94,7 @@
      <string>File</string>
     </property>
     <addaction name="actionUpload_file"/>
-    <addaction name="actionShow_Graph"/>
+    <!--<addaction name="actionShow_Graph"/>-->
    </widget>
    <widget class="QMenu" name="menuHistory">
     <property name="title">

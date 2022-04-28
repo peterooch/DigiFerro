@@ -21,12 +21,12 @@ def create_mask(img):
 
 def contour_dims(mask) -> List[float]:
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    img = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
+    #img = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
     dims = []
     for contour in contours:
         box = cv2.minAreaRect(contour)
         pts = np.int0(cv2.boxPoints(box))
-        cv2.drawContours(img, [pts], -1, (0, 255, 0), 1)
+        #cv2.drawContours(img, [pts], -1, (0, 255, 0), 1)
         dims.append(np.linalg.norm(pts[0] - pts[2]))
 
     #plt.imshow(img)

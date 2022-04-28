@@ -1,10 +1,10 @@
+import io
+
 from PyQt5.QtWidgets import QDialog
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QImage
-
 import matplotlib.pyplot as plt
 import numpy as np
-import io
 
 class GraphWindow(QDialog):
     def __init__(self, parent, graph=None):
