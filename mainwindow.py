@@ -1,8 +1,10 @@
 # This Python file uses the following encoding: utf-8
+import os
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5 import uic
+from PyQt5.QtGui import QIcon
 
 from imageproc import image
 from openfile import OpenFileWindow
@@ -19,14 +21,20 @@ class MainWindow(QMainWindow):
         #self.graph = GraphWindow(self)
         self.img = None
 
+        # Menu Items
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.load_history)
         #self.actionShow_Graph.triggered.connect(self.graph.open)
+        if sys.platform == "win32":
+            self.actionHelp.triggered.connect(lambda *args: os.startfile('DigiFerro Guide.pdf'))
+
+        # Window Buttons
         self.analyzeButton.clicked.connect(self.openfile.open)
         self.fragmentButton.clicked.connect(lambda *args: self.show_image('fragments'))
         self.originalButton.clicked.connect(lambda *args: self.show_image())
         self.graphButton.clicked.connect(lambda *args: self.show_image('graph'))
+        
         self.setMinimumWidth(900)
         self.setMinimumHeight(700)
 
@@ -49,6 +57,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
+    app.setWindowIcon(QIcon(resource_path('icon.png')))
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec_())

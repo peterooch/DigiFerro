@@ -6,9 +6,12 @@ import PyInstaller.__main__
 PyInstaller.__main__.run([
     'mainwindow.py',
     '--name=DigiFerro',
+    '--icon=icon.png',
     '--onefile',
     # Support excel files via pandas
     '--hiddenimport=openpyxl',
+    # Program icon
+    '--add-data=icon.png;.',
     # Qt UI files
     '--add-data=mainwindow.ui;.',
     '--add-data=history.ui;.',

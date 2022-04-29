@@ -10,6 +10,13 @@
             "request": "launch",
             "program": "mainwindow.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Build Project",
+            "type": "python",
+            "request": "launch",
+            "program": "build.py",
+            "console": "integratedTerminal"
         }
     ]
 }
