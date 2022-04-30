@@ -125,7 +125,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="detailsButton">
    <property name="geometry">
     <rect>
      <x>610</x>
@@ -136,6 +136,19 @@
    </property>
    <property name="text">
     <string>More Details...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exportButton">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>330</y>
+     <width>80</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export to file</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_4">

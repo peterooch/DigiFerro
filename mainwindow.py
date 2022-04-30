@@ -10,7 +10,7 @@ from PyQt5.QtGui import QIcon
 from imageproc import image
 from openfile import OpenFileWindow
 from history import HistoryWindow, History
-from util import resource_path
+from util import extract_dir, resource_path
 #from graph import GraphWindow
 
 SETTINGS_PATH = 'settings.json'
@@ -79,19 +79,19 @@ class MainWindow(QMainWindow):
         if fileName == '':
             return
 
-        directory, _ = os.path.split(fileName)
-        self.set_setting('history_file_dir', directory)
+        self.set_setting('history_file_dir', extract_dir(fileName))
         self.history.set_history(History(fileName))
         self.history.open()
 
     def save_image(self):
+        if self.img is None:
+            return
         save_dir = self.get_setting('save_dir', '.')
         file_path, _ = QFileDialog.getSaveFileName(self, directory=f'{save_dir}/{self.img.show_mode}.png', filter='PNG Image (*.png)')
 
         if file_path == '':
             return
-        directory, _ = os.path.split(file_path)
-        self.set_setting('save_dir', directory)
+        self.set_setting('save_dir', extract_dir(file_path))
 
         self.img.save_image(file_path)
 
