@@ -3,6 +3,7 @@ PyQt5
 numpy
 pandas
 openpyxl
+joblib
 matplotlib
 #tensorflow
 scikit-image

@@ -19,4 +19,6 @@ PyInstaller.__main__.run([
     '--add-data=graph.ui;.',
     # Control image
     '--add-data=preprocess/baseline.jpg;preprocess',
+    # Program Guide
+    '--add-data=DigiFerro_Guide.pdf;.',
 ])

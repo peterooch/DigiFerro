@@ -1,3 +1,5 @@
+from os import path
+
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5 import uic
 
@@ -20,14 +22,21 @@ class OpenFileWindow(QDialog):
         self.show()
 
     def browse(self):
-        fileName = QFileDialog.getOpenFileName(self)
-        self.lineEdit.setText(fileName[0])
+        image_dir = self.parent.get_setting('image_file_dir', '')
+        fileName, _ = QFileDialog.getOpenFileName(self, directory=image_dir)
+        if fileName == '':
+            return
+
+        directory, _ = path.split(fileName)
+        self.parent.set_setting('image_file_dir', directory)
+
+        self.lineEdit.setText(fileName)
 
     def ok(self):
         self.hide()
         img = image(self.lineEdit.text())
         self.parent.set_image(img)
-        self.parent.show_image()
+        self.parent.show_image('original')
     
     def cancel(self):
         self.hide()
