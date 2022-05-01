@@ -47,9 +47,6 @@ class MainWindow(QMainWindow):
         self.graphButton.clicked.connect(lambda *args: self.show_image('graph'))
         self.saveButton.clicked.connect(lambda *args: self.save_image())
 
-        self.setMinimumWidth(900)
-        self.setMinimumHeight(700)
-
     def set_image(self, img: image):
         self.img = img
 

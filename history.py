@@ -32,8 +32,11 @@ class HistoryEntry:
             return self.tailnum
         if label == "Flight Hours":
             return self.flighthours
-        if label == "Conclusion":
+        if label == "Analysis Result":
             return self.result
+        if label == "Sample ID":
+            return self.testnum
+        print(f'FIXME: Requested Label "{label}" is not implemented')
         return "" # FIXME
 
 class History():
@@ -77,9 +80,10 @@ class HistoryWindow(QDialog):
         for i, entry in enumerate(self.selected_entries):
             table.insertRow(i)
             table.setItem(i, DATE_COL, QTableWidgetItem(str(entry.date)))
+            table.setItem(i, SAMPLEID_COL, QTableWidgetItem(str(entry.testnum)))
             table.setItem(i, TAILNO_COL, QTableWidgetItem(str(entry.tailnum)))
             table.setItem(i, FLIGHTHOURS_COL, QTableWidgetItem(str(entry.flighthours)))
-            table.setItem(i, CONCLUSION_COL, QTableWidgetItem(str(entry.result)))
+            table.setItem(i, ANALYSIS_COL, QTableWidgetItem(str(entry.result)))
 
     def set_history(self, history: History):
         self.history = history
