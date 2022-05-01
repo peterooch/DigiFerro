@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>372</width>
-    <height>284</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>240</y>
+     <y>340</y>
      <width>233</width>
      <height>34</height>
     </rect>
@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>210</y>
+     <y>320</y>
      <width>91</width>
      <height>21</height>
     </rect>
@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>210</y>
+     <y>320</y>
      <width>251</width>
      <height>21</height>
     </rect>
@@ -53,19 +53,19 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>300</y>
      <width>61</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>File Path:</string>
+    <string>Images</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>230</x>
      <y>10</y>
      <width>81</width>
      <height>16</height>
@@ -75,24 +75,24 @@
     <string>Sample Number:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="sampleLabel">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>10</y>
+     <x>230</x>
+     <y>30</y>
      <width>81</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>151220210001</string> <!-- FIXME -->
+    <string>151220210001</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>30</y>
+     <y>70</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -105,7 +105,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>100</y>
      <width>61</width>
      <height>16</height>
     </rect>
@@ -118,7 +118,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>90</y>
+     <y>130</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -127,11 +127,11 @@
     <string>Part Number:</string>
    </property>
   </widget>
-  <widget class="QDateTimeEdit" name="dateTimeEdit">
+  <widget class="QDateEdit" name="dateEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>30</y>
+     <y>70</y>
      <width>111</width>
      <height>22</height>
     </rect>
@@ -141,7 +141,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>120</y>
+     <y>160</y>
      <width>61</width>
      <height>16</height>
     </rect>
@@ -150,22 +150,12 @@
     <string>Flight Hours:</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="doubleSpinBox">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>120</y>
-     <width>111</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="lineEdit_2">
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>60</y>
-     <width>113</width>
+     <y>100</y>
+     <width>111</width>
      <height>20</height>
     </rect>
    </property>
@@ -174,43 +164,161 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>90</y>
+     <y>130</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>331</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Spectroscopy</string>
+   </property>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Other metals:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>90</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Below Limit</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Above Limit</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Iron:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_4">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>30</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Titanium:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_5">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>160</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <double>10000000000.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Squadron:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_6">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>10</y>
      <width>113</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>150</y>
-     <width>111</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>Passed</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Not Passed</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_8">
+  <widget class="QLabel" name="label_11">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
-     <width>101</width>
-     <height>16</height>
+     <y>40</y>
+     <width>47</width>
+     <height>13</height>
     </rect>
    </property>
    <property name="text">
-    <string>Spectometric Result:</string>
+    <string>Hangar:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_7">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>40</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
    </property>
   </widget>
  </widget>

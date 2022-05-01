@@ -21,7 +21,7 @@ class image():
     def draw_image(self, label: QLabel, img):
         self.drawed_image = img
 
-        label.setGeometry(20, 20, img.shape[1], img.shape[0])
+        label.resize(img.shape[1], img.shape[0])
         img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_RGB888).rgbSwapped()
         label.setPixmap(QPixmap.fromImage(img))
 
