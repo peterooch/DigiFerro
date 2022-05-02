@@ -39,7 +39,7 @@
     <string>Browse</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="imagePathEdit">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -75,7 +75,7 @@
     <string>Sample Number:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="sampleLabel">
+  <widget class="QLabel" name="sampleNumLabel">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -127,7 +127,7 @@
     <string>Part Number:</string>
    </property>
   </widget>
-  <widget class="QDateEdit" name="dateEdit">
+  <widget class="QDateEdit" name="sampleDateEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -142,7 +142,7 @@
     <rect>
      <x>10</x>
      <y>160</y>
-     <width>61</width>
+     <width>101</width>
      <height>16</height>
     </rect>
    </property>
@@ -150,7 +150,7 @@
     <string>Time since overhaul:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="tailNumEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -160,7 +160,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_3">
+  <widget class="QLineEdit" name="partNumEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -195,7 +195,7 @@
      <string>Other metals:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="otherMetalsComboBox">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -228,7 +228,7 @@
      <string>Iron:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="ironEdit">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -251,7 +251,7 @@
      <string>Titanium:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="titaniumEdit">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -262,10 +262,10 @@
     </property>
    </widget>
   </widget>
-  <widget class="QDoubleSpinBox" name="doubleSpinBox">
+  <widget class="QDoubleSpinBox" name="overhaulTimeEdit">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>110</x>
      <y>160</y>
      <width>111</width>
      <height>22</height>
@@ -288,7 +288,7 @@
     <string>Squadron:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_6">
+  <widget class="QLineEdit" name="squadronEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -311,7 +311,7 @@
     <string>Hangar:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_7">
+  <widget class="QLineEdit" name="hangarEdit">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -334,7 +334,7 @@
     <string>Scale:</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QSpinBox" name="scaleEdit">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -355,6 +355,19 @@
    </property>
    <property name="text">
     <string>pixels/µm</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>160</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hours</string>
    </property>
   </widget>
  </widget>

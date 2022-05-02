@@ -30,11 +30,11 @@ class OpenFileWindow(QDialog):
         directory, _ = path.split(fileName)
         self.parent.set_setting('image_file_dir', directory)
 
-        self.lineEdit.setText(fileName)
+        self.imagePathEdit.setText(fileName)
 
     def ok(self):
         self.hide()
-        img = image(self.lineEdit.text())
+        img = image(self.imagePathEdit.text())
         self.parent.set_image(img)
         self.parent.show_image('original')
     
