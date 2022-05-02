@@ -91,7 +91,7 @@
    </column>
    <column>
     <property name="text">
-     <string>Flight Hours</string>
+     <string>Time since overhaul</string>
     </property>
    </column>
    <column>
