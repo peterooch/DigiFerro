@@ -1,5 +1,6 @@
 from jinja2 import Template
 import pdfkit
+
 class Report:
     def __init__(self, squadron, hangar, sampleDate,timeSinceOverhaul, 
                 iron, titanium, otherMetals, scale, testNumber, tailNumber,
@@ -26,8 +27,7 @@ class Report:
     def htmlTopdf(self): 
         pdfkit.from_file('result.html', 'out.pdf')   
 
-r = Report(0,0,1,5,6,2,8,4,5,6,5,8)
-r.generateHtml()
-r.htmlTopdf()
-
-
+if __name__ == "__main__":
+    r = Report(0,0,1,5,6,2,8,4,5,6,5,8)
+    r.generateHtml()
+    r.htmlTopdf()

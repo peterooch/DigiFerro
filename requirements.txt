@@ -7,4 +7,6 @@ joblib
 matplotlib
 #tensorflow
 scikit-image
+jinja2
+pdfkit
 pyinstaller
