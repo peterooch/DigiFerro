@@ -1,6 +1,6 @@
 from os import path
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget
+from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget
 from PyQt5 import uic
 
 from imageproc import image
@@ -25,14 +25,14 @@ class OpenFileWindow(QDialog):
 
     def browse(self):
         image_dir = self.parent.get_setting('image_file_dir', '')
-        fileName, _ = QFileDialog.getOpenFileName(self, directory=image_dir)
-        if fileName == '':
+        fileNames, _ = QFileDialog.getOpenFileNames(self, directory=image_dir)
+        if len(fileNames) == 0:
             return
 
-        directory, _ = path.split(fileName)
+        directory, _ = path.split(fileNames[0])
         self.parent.set_setting('image_file_dir', directory)
 
-        self.imagePathEdit.setText(fileName)
+        self.imageList.addItems(fileNames)
 
     def ok(self):
         self.hide()
@@ -50,9 +50,13 @@ class OpenFileWindow(QDialog):
         report = Report(squadron, hangar, sampleDate, timeSinceOverhaul,
         iron, titanium, otherMetals, scale, testNumber,
         tailNumber, partNumber, 80)
-        img = image(self.imagePathEdit.text())
-        self.parent.set_image(img)
-        self.parent.show_image('original')
+
+        # Image stuff
+        lw: QListWidget = self.imageList
+        images = [image(lw.item(i).text()) for i in range(lw.count())]
+        
+        self.parent.add_images(images)
+        self.parent.show_image('original', 0)
     
     def cancel(self):
         self.hide()

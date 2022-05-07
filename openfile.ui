@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>368</width>
-    <height>426</height>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>390</y>
+     <y>500</y>
      <width>233</width>
      <height>34</height>
     </rect>
@@ -36,17 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Browse</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="imagePathEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>330</y>
-     <width>251</width>
-     <height>21</height>
-    </rect>
+    <string>Add Images</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -351,7 +341,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>370</y>
+     <y>480</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -363,18 +353,24 @@
   <widget class="QSpinBox" name="scaleEdit">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>368</y>
+     <x>40</x>
+     <y>480</y>
      <width>71</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <number>1000000000</number>
+   </property>
+   <property name="value">
+    <number>2</number>
    </property>
   </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>370</y>
+     <x>120</x>
+     <y>480</y>
      <width>47</width>
      <height>13</height>
     </rect>
@@ -407,6 +403,16 @@
    </property>
    <property name="text">
     <string>Show Calendar</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="imageList">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>330</y>
+     <width>256</width>
+     <height>131</height>
+    </rect>
    </property>
   </widget>
  </widget>

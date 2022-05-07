@@ -1,3 +1,4 @@
+from distutils.log import warn
 import os
 from typing import List
 
@@ -18,6 +19,7 @@ ANALYSIS_COL = 6
 CONCLUSION_COL = 7
 
 class HistoryEntry:
+    fixme_once = set()
     def __init__(self, row) -> None:
         self.date = row[1]
         self.tailnum = row[2]
@@ -36,7 +38,9 @@ class HistoryEntry:
             return self.result
         if label == "Sample ID":
             return self.testnum
-        print(f'FIXME: Requested Label "{label}" is not implemented')
+        if label not in HistoryEntry.fixme_once:
+            warn(f'FIXME: Requested Label "{label}" is not implemented')
+            HistoryEntry.fixme_once.add(label)
         return "" # FIXME
 
 class History():
@@ -117,4 +121,4 @@ class HistoryWindow(QDialog):
             rows.append(row)
         
         df = pd.DataFrame(data=rows, columns=headers)
-        df.to_csv(file_path)
+        df.to_csv(file_path, encoding="utf-8")
