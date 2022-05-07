@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         if self.totals_on:
             filename = "totals"
         else:
-            self.images[self.image_id].show_mode
+            filename = self.images[self.image_id].show_mode
 
         file_path, _ = QFileDialog.getSaveFileName(self,
              directory=f'{save_dir}/{filename}.png',
