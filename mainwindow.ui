@@ -6,9 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>1008</width>
     <height>700</height>
    </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>DigiFerro</string>
@@ -17,8 +20,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>10</y>
+      <x>170</x>
+      <y>50</y>
       <width>20</width>
       <height>20</height>
      </rect>
@@ -32,12 +35,12 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>121</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Analyze New Image</string>
+     <string>Analyze New Images</string>
     </property>
    </widget>
    <widget class="QPushButton" name="fragmentButton">
@@ -45,7 +48,7 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>121</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
@@ -58,7 +61,7 @@
      <rect>
       <x>10</x>
       <y>90</y>
-      <width>121</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
@@ -71,7 +74,7 @@
      <rect>
       <x>10</x>
       <y>130</y>
-      <width>121</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
@@ -84,7 +87,7 @@
      <rect>
       <x>10</x>
       <y>170</y>
-      <width>121</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
@@ -93,26 +96,58 @@
     </property>
    </widget>
    <widget class="QListWidget" name="imageList">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>210</y>
-      <width>121</width>
+      <width>141</width>
       <height>221</height>
      </rect>
+    </property>
+    <property name="acceptDrops">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="overallGraphButton">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>440</y>
-      <width>121</width>
+      <y>470</y>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Show Total Distribution</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="fragmentLabel">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>10</y>
+      <width>40</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addButton">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>440</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add Images</string>
     </property>
    </widget>
   </widget>
@@ -121,7 +156,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>1008</width>
      <height>20</height>
     </rect>
    </property>

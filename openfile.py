@@ -3,7 +3,7 @@ from os import path
 from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget
 from PyQt5 import uic
 
-from imageproc import image
+from imageproc import paths_to_imgs
 from util import resource_path
 from Report import Report
 
@@ -16,6 +16,13 @@ class OpenFileWindow(QDialog):
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
         self.set_calendar()
+
+        # Set Drag n Drop
+        lw: QListWidget = self.imageList
+        lw.setDragEnabled(True)
+        lw.dragEnterEvent = lambda e: e.acceptProposedAction()
+        lw.dragMoveEvent = lambda e: e.acceptProposedAction()
+        lw.dropEvent = lambda e: lw.addItems(((url.path()[1:] for url in e.mimeData().urls())))
 
     def load_ui(self):
         uic.loadUi(resource_path('openfile.ui'), self)
@@ -53,10 +60,9 @@ class OpenFileWindow(QDialog):
 
         # Image stuff
         lw: QListWidget = self.imageList
-        images = [image(lw.item(i).text()) for i in range(lw.count())]
-        
-        self.parent.add_images(images)
-        self.parent.show_image('original', 0)
+        paths = [lw.item(i).text() for i in range(lw.count())]
+
+        self.parent.add_images(paths_to_imgs(paths))
     
     def cancel(self):
         self.hide()

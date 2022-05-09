@@ -4,13 +4,13 @@ import sys
 import json
 from typing import List
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget, QLabel
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap, QImage
 import cv2
 import numpy as np
 
-from imageproc import image
+from imageproc import image, paths_to_imgs
 from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from util import extract_dir, gen_graph, get_distribution, resource_path
@@ -55,6 +55,13 @@ class MainWindow(QMainWindow):
         self.overallGraphButton.clicked.connect(lambda *args: self.show_totals())
 
         self.imageList.selectionChanged = self.list_selection
+        # Set Drag n Drop
+        # https://www.reddit.com/r/learnpython/comments/97z5dq/pyqt5_drag_and_drop_file_option/
+        lw: QListWidget = self.imageList
+        lw.setDragEnabled(True)
+        lw.dragEnterEvent = lambda e: e.acceptProposedAction()
+        lw.dragMoveEvent = lambda e: e.acceptProposedAction()
+        lw.dropEvent = lambda e: self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls())))
 
     def load_ui(self):
         uic.loadUi(resource_path('mainwindow.ui'), self)
@@ -62,9 +69,10 @@ class MainWindow(QMainWindow):
     def list_selection(self, selected: QtCore.QItemSelection, deselected):
         self.image_id = selected.indexes()[0].row()
         self.show_image('refresh')
+        self.update_counts()
 
     def add_images(self, images: List[image]):
-        self.images = images
+        self.images += images
 
         for image in images:
             item = QListWidgetItem(str(image))
@@ -72,6 +80,9 @@ class MainWindow(QMainWindow):
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             item.setCheckState(QtCore.Qt.Checked)
             self.imageList.addItem(item)
+
+        self.update_counts()
+        self.show_image('original', 0)
 
     def show_image(self, param, image_id=-1):
         if param == 'refresh' and self.totals_on:
@@ -104,9 +115,11 @@ class MainWindow(QMainWindow):
         dist, bins = get_distribution(dims)
         img = gen_graph(dist, bins)
         self.graph_img = img
+        self.graph_data = dist, bins[1:]
         self.label.resize(img.shape[1], img.shape[0])
         img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.label.setPixmap(QPixmap.fromImage(img))
+        self.update_counts()
 
     def get_setting(self, key, default):
         try:
@@ -153,6 +166,19 @@ class MainWindow(QMainWindow):
             self.images[self.image_id].save_image(file_path)
         else:
             cv2.imwrite(file_path, self.graph_img)
+
+    def update_counts(self):
+        if self.totals_on and self.graph_img is not None:        
+            dist, bins = self.graph_data
+        else:
+            dist, bins = self.images[self.image_id].graph_data
+
+        counts = {str(b): str(d) for d, b in zip(dist, bins)}
+        # Fancify in future
+        label: QLabel = self.fragmentLabel
+        labelText = f"Fragment counts: {', '.join(f'{k}: {v}' for k,v in counts.items())}"
+        label.resize(label.fontMetrics().boundingRect(labelText).size())
+        label.setText(labelText)
 
 if __name__ == "__main__":
     app = QApplication([])

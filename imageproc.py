@@ -1,9 +1,11 @@
 from os import path
+from typing import List
 
 import cv2
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QLabel
 import numpy as np
+from joblib import Parallel, delayed
 
 from preprocess.hsv_pipeline import contour_dims, create_mask
 from util import gen_graph, get_distribution
@@ -19,6 +21,13 @@ class image():
         self.mask = create_mask(self.img)
         self.show_mode = 'original'
         self.drawed_image = None
+
+        self.dims = contour_dims(self.mask)
+        self.dist, self.bins = get_distribution(self.dims, self.scale)
+
+    @property
+    def graph_data(self):
+        return self.dist, self.bins[1:]
 
     def __str__(self):
         return self.filename
@@ -51,10 +60,11 @@ class image():
         self.draw_image(label, img)
 
     def get_dims(self):
-        return contour_dims(self.mask)
+        return self.dims
 
     def create_graph(self):
-        dims = contour_dims(self.mask)
-        dist, bins = get_distribution(dims, self.scale)
-        img = gen_graph(dist, bins)
-        return img
+        return gen_graph(self.dist, self.bins)
+
+def paths_to_imgs(paths) -> List[image]:
+    # Use all cores for image processing
+    return Parallel(n_jobs=-1, verbose=0)(delayed(image)(path) for path in paths)

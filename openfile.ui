@@ -414,6 +414,9 @@
      <height>131</height>
     </rect>
    </property>
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <resources/>
