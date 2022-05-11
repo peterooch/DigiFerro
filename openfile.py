@@ -1,6 +1,6 @@
 from os import path
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget
+from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
 from PyQt5 import uic
 
 from imageproc import paths_to_imgs
@@ -42,22 +42,45 @@ class OpenFileWindow(QDialog):
         self.imageList.addItems(fileNames)
 
     def ok(self):
-        self.hide()
+        msgBox: QMessageBox = QMessageBox(self)
         testNumber = self.sampleNumLabel.text()
         squadron = self.squadronEdit.text()
+        if (squadron == ''):
+            return
         hangar = self.hangarEdit.text()
+        if (hangar == ''):
+            msgBox.setText('please fill the hangar number')
+            msgBox.show()
+            return
         sampleDate = self.sampleDateEdit.date()
         tailNumber = self.tailNumEdit.text()
+        if (tailNumber == ''):
+            msgBox.setText('please fill the tail number')
+            msgBox.show()
+            return
         partNumber = self.partNumEdit.text()
+        if (partNumber == ''):
+            msgBox.setText('please fill the part number')
+            msgBox.show()
+            return
         timeSinceOverhaul = self.overhaulTimeEdit.value()
         iron = self.ironEdit.text()
+        if (iron == ''):
+            msgBox.setText('please fill the iron number')
+            msgBox.show()
+            return
         titanium = self.titaniumEdit.text()
+        if (titanium == ''):
+            msgBox.setText('please fill the titanium number')
+            msgBox.show()
+            return
         otherMetals = self.otherMetalsComboBox.currentText()
         scale = self.scaleEdit.value()
         report = Report(squadron, hangar, sampleDate, timeSinceOverhaul,
         iron, titanium, otherMetals, scale, testNumber,
         tailNumber, partNumber, 80)
 
+        self.hide()
         # Image stuff
         lw: QListWidget = self.imageList
         paths = [lw.item(i).text() for i in range(lw.count())]
