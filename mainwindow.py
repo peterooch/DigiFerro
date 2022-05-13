@@ -13,6 +13,7 @@ import numpy as np
 from imageproc import image, paths_to_imgs
 from openfile import OpenFileWindow
 from history import HistoryWindow, History
+from login import LoginWindow
 from util import extract_dir, gen_graph, get_distribution, resource_path
 #from graph import GraphWindow
 
@@ -22,6 +23,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.load_ui()
+        self.login = loginWindow(self)
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
         #self.graph = GraphWindow(self)
@@ -142,6 +144,10 @@ class MainWindow(QMainWindow):
         self.set_setting('history_file_dir', extract_dir(fileName))
         self.history.set_history(History(fileName))
         self.history.open()
+    
+    def show(self):
+        super(MainWindow, self).show()
+        self.login.exec()
 
     def save_image(self):
         if self.image_id == -1:
@@ -166,7 +172,6 @@ class MainWindow(QMainWindow):
             self.images[self.image_id].save_image(file_path)
         else:
             cv2.imwrite(file_path, self.graph_img)
-
     def update_counts(self):
         if self.totals_on and self.graph_img is not None:        
             dist, bins = self.graph_data
