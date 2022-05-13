@@ -11,7 +11,7 @@ class LoginWindow(QDialog):
         self.load_ui()
 
     def load_ui(self):
-        uic.loadUi(resource_path('Login.ui'), self)
+        uic.loadUi(resource_path('login.ui'), self)
 
     def open(self):
         self.show()

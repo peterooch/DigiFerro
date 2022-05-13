@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.load_ui()
-        self.login = loginWindow(self)
+        self.login = LoginWindow(self)
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
         #self.graph = GraphWindow(self)
