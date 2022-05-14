@@ -1,3 +1,3 @@
 {
-    "files": ["history.ui","openfile.ui","graph.ui","mainwindow.ui","mainwindow.py","Login.ui"]
+    "files": ["history.ui","openfile.ui","graph.ui","mainwindow.ui","Login.ui","mainwindow.py","createacount.ui"]
 }
