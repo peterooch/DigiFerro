@@ -127,7 +127,7 @@
    <widget class="QLabel" name="fragmentLabel">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>260</x>
       <y>10</y>
       <width>40</width>
       <height>31</height>
@@ -148,6 +148,19 @@
     </property>
     <property name="text">
      <string>Add Images</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="rectCBox">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>10</y>
+      <width>101</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show box plots</string>
     </property>
    </widget>
   </widget>

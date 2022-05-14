@@ -7,10 +7,18 @@ from PyQt5.QtWidgets import QLabel
 import numpy as np
 from joblib import Parallel, delayed
 
-from preprocess.hsv_pipeline import contour_dims, create_mask
+from preprocess.hsv_pipeline import contour_dims, create_mask, get_rects
 from util import gen_graph, get_distribution
 
-class image():
+class image:
+    SHOW_ORIGINAL  = (1 << 0)
+    SHOW_MASK      = (1 << 1)
+    SHOW_GRAPH     = (1 << 2)
+    SHOW_BOX_PLOTS = (1 << 3)
+
+    __slots__ = ("scale", "filename", "img", "mask", "show_mode",
+                 "drawed_image", "dims", "dist", "bins", "box_plots")
+
     def __init__(self, image_path, scale=2):
         with open(image_path, 'rb') as file:
             image_bytes = file.read()
@@ -24,6 +32,7 @@ class image():
 
         self.dims = contour_dims(self.mask)
         self.dist, self.bins = get_distribution(self.dims, self.scale)
+        self.box_plots = get_rects(self.mask)
 
     @property
     def graph_data(self):
@@ -42,22 +51,36 @@ class image():
             return
 
         cv2.imwrite(filename, self.drawed_image)
-        
-    def show(self, label: QLabel, option='original'):
+
+    def show(self, label: QLabel, option=None):
+        if option is None:
+            option = image.SHOW_ORIGINAL
         self.show_mode = option
 
-        if option == 'graph':
+        if option & image.SHOW_GRAPH:
             img = self.create_graph()
             self.drawed_image = img
-        elif option == 'fragments':
-            self.drawed_image = cv2.cvtColor(self.mask, cv2.COLOR_GRAY2BGR)
-            img = cv2.resize(self.drawed_image, (800, 600))
+            return self.draw_image(label, img)
+
+        if option & image.SHOW_MASK:
+            img = cv2.cvtColor(self.mask, cv2.COLOR_GRAY2BGR)
         else:
-            self.drawed_image = self.img
-            img = cv2.resize(self.img, (800, 600))
+            img = self.img
+
+        if option & image.SHOW_BOX_PLOTS:
+            img = self.apply_box_plots(img)
+
+        self.drawed_image = img
+        img = cv2.resize(img, (960, 720))
 
         # img should be in BGR format
         self.draw_image(label, img)
+
+    def apply_box_plots(self, image):
+        b, g, r = cv2.split(image)
+        _, g2, _ = cv2.split(self.box_plots)
+        img = cv2.merge((b, (g | g2), r))
+        return img
 
     def get_dims(self):
         return self.dims

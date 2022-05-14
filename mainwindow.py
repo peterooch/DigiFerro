@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.image_id = -1
         self.totals_on = False
         self.graph_img = None
+        self.prev_param = None
 
         try:
             with open(SETTINGS_PATH, 'r') as settings:
@@ -50,9 +51,9 @@ class MainWindow(QMainWindow):
 
         # Window Buttons
         self.analyzeButton.clicked.connect(self.openfile.open)
-        self.fragmentButton.clicked.connect(lambda *args: self.show_image('fragments'))
-        self.originalButton.clicked.connect(lambda *args: self.show_image('original'))
-        self.graphButton.clicked.connect(lambda *args: self.show_image('graph'))
+        self.fragmentButton.clicked.connect(lambda *args: self.show_image(image.SHOW_MASK))
+        self.originalButton.clicked.connect(lambda *args: self.show_image(image.SHOW_ORIGINAL))
+        self.graphButton.clicked.connect(lambda *args: self.show_image(image.SHOW_GRAPH))
         self.saveButton.clicked.connect(lambda *args: self.save_image())
         self.overallGraphButton.clicked.connect(lambda *args: self.show_totals())
 
@@ -65,6 +66,8 @@ class MainWindow(QMainWindow):
         lw.dragMoveEvent = lambda e: e.acceptProposedAction()
         lw.dropEvent = lambda e: self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls())))
 
+        self.rectCBox.clicked.connect(lambda *args: self.show_image('refresh'))
+
     def load_ui(self):
         uic.loadUi(resource_path('mainwindow.ui'), self)
 
@@ -76,20 +79,22 @@ class MainWindow(QMainWindow):
     def add_images(self, images: List[image]):
         self.images += images
 
-        for image in images:
-            item = QListWidgetItem(str(image))
-            item.attached_image = image
+        for img in images:
+            item = QListWidgetItem(str(img))
+            item.attached_image = img
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             item.setCheckState(QtCore.Qt.Checked)
             self.imageList.addItem(item)
 
         self.update_counts()
-        self.show_image('original', 0)
+        self.show_image(image.SHOW_ORIGINAL, 0)
 
     def show_image(self, param, image_id=-1):
         if param == 'refresh' and self.totals_on:
             return
         if param == 'refresh':
+            if self.prev_param is None:
+                return
             param = self.prev_param
         else:
             self.prev_param = param
@@ -100,7 +105,11 @@ class MainWindow(QMainWindow):
             self.image_id = image_id
         if image_id == -1 or len(self.images) <= image_id:
             return
-        self.images[image_id].show(self.label, param)
+
+        if self.rectCBox.isChecked():
+            self.images[image_id].show(self.label, param | image.SHOW_BOX_PLOTS)
+        else:
+            self.images[image_id].show(self.label, param)
 
     def show_totals(self):
         self.totals_on = True

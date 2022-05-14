@@ -2,8 +2,8 @@ from typing import List
 
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from skimage.exposure import match_histograms
+from joblib import Memory
 
 from util import resource_path
 
@@ -14,6 +14,8 @@ SPALLING_UPPER = np.uint8([255, 255, 255])
 # Histogram baseline image
 BASELINE = cv2.imread(resource_path('preprocess/baseline.jpg'))
 
+memory = Memory('data')
+
 def create_mask(img):
     img = np.uint8(match_histograms(img, BASELINE))
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -21,19 +23,26 @@ def create_mask(img):
 
     return mask
 
+@memory.cache(verbose=0)
+def find_contours(mask):
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
+
 def contour_dims(mask) -> List[float]:
-    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    #img = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
+    contours = find_contours(mask)
     dims = []
     for contour in contours:
         box = cv2.minAreaRect(contour)
         pts = np.int0(cv2.boxPoints(box))
-        #cv2.drawContours(img, [pts], -1, (0, 255, 0), 1)
         dims.append(np.linalg.norm(pts[0] - pts[2]))
-
-    #plt.imshow(img)
-    #plt.show()
     return sorted(dims, reverse=True)
+
+def get_rects(mask):
+    contours = find_contours(mask)
+    img = np.zeros((*mask.shape, 3), np.uint8)
+    points = [np.int0(cv2.boxPoints(cv2.minAreaRect(contour))) for contour in contours]
+    cv2.drawContours(img, points, -1, (0, 255, 0), 3)
+    return img
 
 if __name__ == "__main__":
     with open('preprocess/baseline.jpg', 'rb') as file:
