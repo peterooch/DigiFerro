@@ -1,9 +1,14 @@
 from os import path
+from xmlrpc.client import Boolean
 
 from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
 from PyQt5 import uic, QtCore
 from util import resource_path
 from joblib import load, dump
+from createAccount import CreateAccount, User
+users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
+        User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
+        User('Chen', 'chef', 'Chen', '123456', 'Comptroller')]
 
 class LoginWindow(QDialog):
     def __init__(self, parent) -> None:
@@ -12,7 +17,7 @@ class LoginWindow(QDialog):
         self.load_ui()
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
-
+        self.CreateNewAcount.clicked.connect(self.create_new_acount)
     def load_ui(self):
         uic.loadUi(resource_path('login.ui'), self)
 
@@ -21,10 +26,29 @@ class LoginWindow(QDialog):
 
     def ok(self):
         msgBox: QMessageBox = QMessageBox(self)
-        userName = self.Username.text()   
+        userName = self.Username.text()  
         passWord = self.Password.text()
+        checkUser: Boolean = False
+        for user in users:
+            if userName == user.userName and passWord == user.passWord:
+                checkUser = True
+        if checkUser:
+            self.close()
+        else:
+            msgBox.setText('Invalid credentials')
+            msgBox.show()
+            return
         x = self.Confirm.isChecked()
 
-
     def cancel(self):
-        pass
+        msgBox: QMessageBox = QMessageBox(self)
+        msgBox.setText('You must be logged in')
+        msgBox.exec()
+        return
+
+    def create_new_acount(self):
+        self.createaccount = CreateAccount(self)
+        self.createaccount.show()
+
+
+
