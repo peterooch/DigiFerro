@@ -36,6 +36,7 @@ class CreateAccount(QDialog):
             msgBox.exec()
         else: #User created successfully, user object must be created with all relevant variables.
             user = User(firstname, lastname, username, password, role)
+            add_user(user)
             msgBox.setText('User created successfully')
             msgBox.show()
             return
@@ -52,5 +53,16 @@ class User:
         self.passWord = passWord
         self.role = role
 
+# FIXME implement somesort of encryption
+USER_FILE = 'data/users.pkl'
+try:
+    users = load(USER_FILE)
+except:
+    users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
+             User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
+             User('Chen', 'chef', 'Chen', '123456', 'Comptroller')]
+    dump(users, USER_FILE)
 
-
+def add_user(user: User):
+    users.append(user)
+    dump(users, USER_FILE)

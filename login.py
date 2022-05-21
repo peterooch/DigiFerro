@@ -5,10 +5,7 @@ from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, 
 from PyQt5 import uic, QtCore
 from util import resource_path
 from joblib import load, dump
-from createAccount import CreateAccount, User
-users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
-        User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
-        User('Chen', 'chef', 'Chen', '123456', 'Comptroller')]
+from createAccount import CreateAccount, User, users
 
 class LoginWindow(QDialog):
     def __init__(self, parent) -> None:
