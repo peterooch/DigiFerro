@@ -2,37 +2,54 @@ from os import path
 from typing import List
 
 import cv2
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtWidgets import QLabel
 import numpy as np
 from joblib import Parallel, delayed
 
-from preprocess.hsv_pipeline import contour_dims, create_mask, get_rects
+from preprocess.hsv_pipeline import contour_dims, create_masks, get_rects
 from util import gen_graph, get_distribution
 
+BLACK_PIXEL = np.uint8([0, 0, 0])
+
 class image:
+    '''
+    Image Class
+    -----------
+    Contains data and methods to retreive data related to single image.
+
+    This class contains image data such as:
+      0. The actual image
+      1. Spalling and Rubbing binary masks
+      2. Annotated contour boxplots for spalling fragments
+      3. Fragment bin limits and distribution
+      4. Filename (used for sorting/identification)
+    
+    In addition the class has methods for:
+      1. Generation of graph using fragment distribution
+      2. Overlay boxplots on the fragment mask or the image
+      3. Saving graph/mask/original image to disk
+    '''
     SHOW_ORIGINAL  = (1 << 0)
     SHOW_MASK      = (1 << 1)
     SHOW_GRAPH     = (1 << 2)
     SHOW_BOX_PLOTS = (1 << 3)
 
     __slots__ = ("scale", "filename", "img", "mask", "show_mode",
-                 "drawed_image", "dims", "dist", "bins", "box_plots")
+                 "drawed_image", "dims", "dist", "bins", "box_plots", "rubbing")
 
-    def __init__(self, image_path, scale=2):
+    def __init__(self, image_path, scale=1):
         with open(image_path, 'rb') as file:
             image_bytes = file.read()
         
         self.scale = scale
         _, self.filename = path.split(image_path)
         self.img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
-        self.mask = create_mask(self.img)
+        self.mask, self.rubbing = create_masks(self.img)
         self.show_mode = 'original'
         self.drawed_image = None
 
         self.dims = contour_dims(self.mask)
         self.dist, self.bins = get_distribution(self.dims, self.scale)
-        self.box_plots = get_rects(self.mask)
+        self.box_plots = get_rects(self.mask, self.scale)
 
     @property
     def graph_data(self):
@@ -40,11 +57,10 @@ class image:
 
     def __str__(self):
         return self.filename
-
-    def draw_image(self, label: QLabel, img):
-        label.resize(img.shape[1], img.shape[0])
-        img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_RGB888).rgbSwapped()
-        label.setPixmap(QPixmap.fromImage(img))
+    
+    @property
+    def sort_key(self):
+        return int("".join(c for c in self.filename if c.isnumeric()))     
 
     def save_image(self, filename):
         if self.drawed_image is None:
@@ -52,7 +68,7 @@ class image:
 
         cv2.imwrite(filename, self.drawed_image)
 
-    def show(self, label: QLabel, option=None):
+    def get_image(self, option=None):
         if option is None:
             option = image.SHOW_ORIGINAL
         self.show_mode = option
@@ -60,10 +76,11 @@ class image:
         if option & image.SHOW_GRAPH:
             img = self.create_graph()
             self.drawed_image = img
-            return self.draw_image(label, img)
+            return img
 
         if option & image.SHOW_MASK:
-            img = cv2.cvtColor(self.mask, cv2.COLOR_GRAY2BGR)
+            combined_mask = self.mask | (self.rubbing // 2)
+            img = cv2.cvtColor(combined_mask, cv2.COLOR_GRAY2BGR)
         else:
             img = self.img
 
@@ -71,16 +88,13 @@ class image:
             img = self.apply_box_plots(img)
 
         self.drawed_image = img
-        img = cv2.resize(img, (960, 720))
-
         # img should be in BGR format
-        self.draw_image(label, img)
+        return img
 
     def apply_box_plots(self, image):
-        b, g, r = cv2.split(image)
-        _, g2, _ = cv2.split(self.box_plots)
-        img = cv2.merge((b, (g | g2), r))
-        return img
+        # Make plots a text clearer using a mask
+        mask = cv2.cvtColor(cv2.inRange(self.box_plots, BLACK_PIXEL, BLACK_PIXEL), cv2.COLOR_GRAY2BGR)
+        return (image & mask) | self.box_plots
 
     def get_dims(self):
         return self.dims
@@ -89,5 +103,5 @@ class image:
         return gen_graph(self.dist, self.bins)
 
 def paths_to_imgs(paths) -> List[image]:
-    # Use all cores for image processing
-    return Parallel(n_jobs=-1, verbose=0)(delayed(image)(path) for path in paths)
+    # Use all but 1 core for image processing
+    return Parallel(n_jobs=-2, verbose=0, prefer='threads')(delayed(image)(path) for path in paths)

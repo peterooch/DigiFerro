@@ -83,12 +83,15 @@ class MainWindow(QMainWindow):
         self.images += images
 
         for img in images:
-            item = QListWidgetItem(str(img))
+            item = ImageListWidgetItem(str(img))
             item.attached_image = img
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             item.setCheckState(QtCore.Qt.Checked)
             self.imageList.addItem(item)
 
+        # sort internal list and the image list
+        self.images.sort(key=lambda i: i.sort_key)
+        self.imageList.sortItems(QtCore.Qt.AscendingOrder)
         self.update_counts()
         self.show_image(image.SHOW_ORIGINAL, 0)
 
@@ -110,9 +113,23 @@ class MainWindow(QMainWindow):
             return
 
         if self.rectCBox.isChecked():
-            self.images[image_id].show(self.label, param | image.SHOW_BOX_PLOTS)
+            img = self.images[image_id].get_image(param | image.SHOW_BOX_PLOTS)
         else:
-            self.images[image_id].show(self.label, param)
+            img = self.images[image_id].get_image(param)
+
+        label: QLabel = self.label
+        img_size = self.size()
+        label_pos = label.pos()
+        img_size.setHeight(img_size.height() - label_pos.y() - 10)
+        img_size.setWidth(img_size.width() - label_pos.x() - 10)
+        label.resize(img_size.width(), img_size.height())
+        # resizing using QT instead of OpenCV
+        img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_BGR888).scaledToHeight(img_size.height())
+        label.setPixmap(QPixmap.fromImage(img))
+
+    def resizeEvent(self, arg) -> None:
+        self.show_image('refresh')
+        return super().resizeEvent(arg)
 
     def show_totals(self):
         self.totals_on = True
@@ -131,7 +148,7 @@ class MainWindow(QMainWindow):
         self.graph_img = img
         self.graph_data = dist, bins[1:]
         self.label.resize(img.shape[1], img.shape[0])
-        img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_RGB888).rgbSwapped()
+        img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_BGR888)
         self.label.setPixmap(QPixmap.fromImage(img))
         self.update_counts()
 
@@ -158,7 +175,7 @@ class MainWindow(QMainWindow):
         self.history.open()
     
     def show(self):
-        super(MainWindow, self).show()
+        self.showMaximized()
         self.login.exec()
 
     def save_image(self):
@@ -198,10 +215,21 @@ class MainWindow(QMainWindow):
         label.setText(labelText)
 
     def current_user(self, username):
-        if username == 'Dima':
+        if username == 'Dima': # FIXME hardcoded value
             self.Create_New_Acount.setVisible(True)
         else:
             self.Create_New_Acount.setVisible(False)
+
+# Custom class to enable custom sorting
+class ImageListWidgetItem(QListWidgetItem):
+    @property
+    def sort_key(self):
+        return int("".join(c for c in self.text() if c.isnumeric()))
+    def __lt__(self, other):
+        try:
+            return self.sort_key < other.sort_key
+        except:
+            return QListWidgetItem.__lt__(self, other)
 
 if __name__ == "__main__":
     app = QApplication([])

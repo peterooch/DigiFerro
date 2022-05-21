@@ -24,6 +24,9 @@ class OpenFileWindow(QDialog):
         lw.dragMoveEvent = lambda e: e.acceptProposedAction()
         lw.dropEvent = lambda e: lw.addItems(((url.path()[1:] for url in e.mimeData().urls())))
 
+        # Lockup dialog size
+        self.setFixedSize(self.size())
+
     def load_ui(self):
         uic.loadUi(resource_path('openfile.ui'), self)
 
