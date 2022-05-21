@@ -35,7 +35,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>141</width>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
@@ -115,8 +115,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>470</y>
-      <width>141</width>
+      <y>480</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -140,10 +140,10 @@
    <widget class="QPushButton" name="addButton">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>50</x>
       <y>440</y>
-      <width>71</width>
-      <height>21</height>
+      <width>101</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -153,10 +153,10 @@
    <widget class="QCheckBox" name="rectCBox">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>180</x>
       <y>10</y>
       <width>101</width>
-      <height>19</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -170,7 +170,7 @@
      <x>0</x>
      <y>0</y>
      <width>1008</width>
-     <height>20</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -178,6 +178,7 @@
      <string>File</string>
     </property>
     <addaction name="actionUpload_file"/>
+    <addaction name="Create_New_Acount"/>
    </widget>
    <widget class="QMenu" name="menuHistory">
     <property name="title">
@@ -228,6 +229,11 @@
   <action name="actionShow_Graph">
    <property name="text">
     <string>DEMO: Show Graph</string>
+   </property>
+  </action>
+  <action name="Create_New_Acount">
+   <property name="text">
+    <string>Create New Acount</string>
    </property>
   </action>
  </widget>

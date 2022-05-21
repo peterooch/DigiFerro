@@ -17,7 +17,6 @@ class LoginWindow(QDialog):
         self.load_ui()
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
-        self.CreateNewAcount.clicked.connect(self.create_new_acount)
     def load_ui(self):
         uic.loadUi(resource_path('login.ui'), self)
 
@@ -32,6 +31,7 @@ class LoginWindow(QDialog):
         for user in users:
             if userName == user.userName and passWord == user.passWord:
                 checkUser = True
+                self.parent.current_user(userName)
         if checkUser:
             self.close()
         else:
@@ -49,6 +49,7 @@ class LoginWindow(QDialog):
     def create_new_acount(self):
         self.createaccount = CreateAccount(self)
         self.createaccount.show()
+
 
 
 

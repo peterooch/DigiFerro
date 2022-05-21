@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Login Page</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -97,7 +97,7 @@
   <widget class="QLineEdit" name="Username">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>200</x>
      <y>120</y>
      <width>161</width>
      <height>25</height>
@@ -107,24 +107,11 @@
   <widget class="QLineEdit" name="Password">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>200</x>
      <y>180</y>
      <width>161</width>
      <height>25</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="CreateNewAcount">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>380</y>
-     <width>181</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Create new acount</string>
    </property>
   </widget>
  </widget>

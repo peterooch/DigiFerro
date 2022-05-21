@@ -14,6 +14,7 @@ from imageproc import image, paths_to_imgs
 from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from login import LoginWindow
+from createAccount import CreateAccount
 from util import extract_dir, gen_graph, get_distribution, resource_path
 #from graph import GraphWindow
 
@@ -26,6 +27,7 @@ class MainWindow(QMainWindow):
         self.login = LoginWindow(self)
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
+        self.createnewacount = CreateAccount(self)
         #self.graph = GraphWindow(self)
         self.images: List[image] = []
         self.image_id = -1
@@ -45,6 +47,7 @@ class MainWindow(QMainWindow):
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.load_history)
+        self.Create_New_Acount.triggered.connect(self.createnewacount.open)
         #self.actionShow_Graph.triggered.connect(self.graph.open)
         if sys.platform == "win32":
             self.actionHelp.triggered.connect(lambda *args: os.startfile(resource_path('DigiFerro_Guide.pdf')))
@@ -193,6 +196,12 @@ class MainWindow(QMainWindow):
         labelText = f"Fragment counts: {', '.join(f'{k}: {v}' for k,v in counts.items())}"
         label.resize(label.fontMetrics().boundingRect(labelText).size())
         label.setText(labelText)
+
+    def current_user(self, username):
+        if username == 'Dima':
+            self.Create_New_Acount.setVisible(True)
+        else:
+            self.Create_New_Acount.setVisible(False)
 
 if __name__ == "__main__":
     app = QApplication([])
