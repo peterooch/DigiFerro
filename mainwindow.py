@@ -232,6 +232,8 @@ class ImageListWidgetItem(QListWidgetItem):
             return QListWidgetItem.__lt__(self, other)
 
 if __name__ == "__main__":
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     app = QApplication([])
     app.setWindowIcon(QIcon(resource_path('icon.png')))
     widget = MainWindow()

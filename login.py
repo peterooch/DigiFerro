@@ -17,6 +17,9 @@ class LoginWindow(QDialog):
         self.load_ui()
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
+
+        #self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.WindowTitleHint | QtCore.Qt.CustomizeWindowHint)
+
     def load_ui(self):
         uic.loadUi(resource_path('login.ui'), self)
 
@@ -42,6 +45,7 @@ class LoginWindow(QDialog):
 
     def cancel(self):
         msgBox: QMessageBox = QMessageBox(self)
+        msgBox.setWindowTitle('Error')
         msgBox.setText('You must be logged in')
         msgBox.exec()
         return
@@ -49,7 +53,3 @@ class LoginWindow(QDialog):
     def create_new_acount(self):
         self.createaccount = CreateAccount(self)
         self.createaccount.show()
-
-
-
-
