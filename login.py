@@ -4,7 +4,6 @@ from xmlrpc.client import Boolean
 from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
 from PyQt5 import uic, QtCore
 from util import resource_path
-from joblib import load, dump
 from createAccount import CreateAccount, User, users
 
 class LoginWindow(QDialog):
@@ -31,12 +30,14 @@ class LoginWindow(QDialog):
         for user in users:
             if userName == user.userName and passWord == user.passWord:
                 checkUser = True
-                self.parent.current_user(userName)
+                self.parent.set_current_user(user)
+                break
         if checkUser:
             self.close()
         else:
+            msgBox.setWindowTitle('Error')
             msgBox.setText('Invalid credentials')
-            msgBox.show()
+            msgBox.exec()
             return
         x = self.Confirm.isChecked()
 

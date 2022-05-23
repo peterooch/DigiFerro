@@ -23,4 +23,6 @@ PyInstaller.__main__.run([
     '--add-data=preprocess/baseline.jpg;preprocess',
     # Program Guide
     '--add-data=DigiFerro_Guide.pdf;.',
+    # PDF Exporter
+    '--add-data=wkhtmltopdf.exe;.',
 ])

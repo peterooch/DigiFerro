@@ -214,8 +214,9 @@ class MainWindow(QMainWindow):
         label.resize(label.fontMetrics().boundingRect(labelText).size())
         label.setText(labelText)
 
-    def current_user(self, username):
-        if username == 'Dima': # FIXME hardcoded value
+    def set_current_user(self, user):
+        self.user = user
+        if user.role == 'Confirm':
             self.Create_New_Acount.setVisible(True)
         else:
             self.Create_New_Acount.setVisible(False)

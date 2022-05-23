@@ -1,4 +1,5 @@
 from os import path
+from typing import List
 
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5 import uic
@@ -56,7 +57,7 @@ class User:
 # FIXME implement somesort of encryption
 USER_FILE = 'data/users.pkl'
 try:
-    users = load(USER_FILE)
+    users: List[User] = load(USER_FILE)
 except:
     users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
              User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
