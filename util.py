@@ -37,7 +37,7 @@ def gen_graph(dist, bins):
     img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
     return img
 
-def get_distribution(dims, scale=2):
+def get_distribution(dims, scale):
     '''
     `scale` is the pixel/micrometer ratio in the source image
     '''
@@ -45,3 +45,8 @@ def get_distribution(dims, scale=2):
     BINS = np.array([0, 75, 105, 120, float('inf')])
     dist, _ = np.histogram(dims, bins=(BINS * scale))
     return dist, BINS
+
+def rubbing_precent(rubbing_mask):
+    all_ones = np.ones_like(rubbing_mask)
+    rubbing_ones = rubbing_mask / 255
+    return (rubbing_ones.sum() / all_ones.sum()) * 100 

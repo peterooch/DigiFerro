@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
-    <height>362</height>
+    <width>1060</width>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
-     <x>880</x>
-     <y>330</y>
+     <x>960</x>
+     <y>410</y>
      <width>80</width>
      <height>21</height>
     </rect>
@@ -70,8 +70,8 @@
     <rect>
      <x>20</x>
      <y>90</y>
-     <width>941</width>
-     <height>231</height>
+     <width>1021</width>
+     <height>311</height>
     </rect>
    </property>
    <column>
@@ -114,6 +114,11 @@
      <string>Conclusion</string>
     </property>
    </column>
+   <column>
+    <property name="text">
+     <string>Hidden: EntryID</string>
+    </property>
+   </column>
   </widget>
   <widget class="QComboBox" name="comboBox">
    <property name="geometry">
@@ -128,8 +133,8 @@
   <widget class="QPushButton" name="detailsButton">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>330</y>
+     <x>660</x>
+     <y>410</y>
      <width>80</width>
      <height>21</height>
     </rect>
@@ -141,8 +146,8 @@
   <widget class="QPushButton" name="exportButton">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>330</y>
+     <x>560</x>
+     <y>410</y>
      <width>80</width>
      <height>21</height>
     </rect>
@@ -154,8 +159,8 @@
   <widget class="QPushButton" name="pushButton_4">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>330</y>
+     <x>760</x>
+     <y>410</y>
      <width>80</width>
      <height>21</height>
     </rect>
@@ -164,11 +169,11 @@
     <string>Edit</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="removeButton">
    <property name="geometry">
     <rect>
-     <x>790</x>
-     <y>330</y>
+     <x>860</x>
+     <y>410</y>
      <width>80</width>
      <height>21</height>
     </rect>

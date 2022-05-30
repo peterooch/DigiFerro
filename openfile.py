@@ -1,6 +1,7 @@
 from os import path
 
 from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
+from PyQt5.QtCore import QDate
 from PyQt5 import uic
 
 from imageproc import paths_to_imgs
@@ -15,6 +16,19 @@ class OpenFileWindow(QDialog):
         self.pushButton.clicked.connect(self.browse)
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
+
+        date = QDate.currentDate()
+        date_format = f'{str(date.day()).zfill(2)}{str(date.month()).zfill(2)}{date.year()}'
+
+        if date_format != self.parent.get_setting('last_date', date_format):
+            self.parent.set_setting('increment', 0)
+
+        self.parent.set_setting('last_date', date_format)
+        current_increment = self.parent.get_setting('increment', 0) + 1
+        self.parent.set_setting('increment', current_increment) 
+        self.sampleNumLabel.setText(f'{date_format}{str(current_increment).zfill(4)}')
+
+        self.sampleDateEdit.setDate(date)
         self.set_calendar()
 
         # Set Drag n Drop

@@ -8,6 +8,8 @@ import numpy as np
 
 from util import resource_path
 
+# THIS FILE IS OBSOLETE AND KEPT FOR HISTORICAL PURPOSES
+
 class GraphWindow(QDialog):
     def __init__(self, parent, graph=None):
         super(GraphWindow, self).__init__(parent)

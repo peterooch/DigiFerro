@@ -75,6 +75,7 @@
     </rect>
    </property>
    <property name="text">
+    <!-- This is a dummy value -->
     <string>151220210001</string>
    </property>
   </widget>

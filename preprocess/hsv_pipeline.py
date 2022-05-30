@@ -8,8 +8,8 @@ from joblib import Memory
 from util import resource_path
 
 # Spalling fragment hsv range
-SPALLING_LOWER = np.uint8([0, 0, 200])
-SPALLING_UPPER = np.uint8([255, 255, 255])
+SPALLING_LOWER = np.uint8([[225]])
+SPALLING_UPPER = np.uint8([[255]])
 # Rubbing V Layer range
 RUBBING_LOWER = np.uint8([[0]])
 RUBBING_UPPER = np.uint8([[100]])
@@ -25,11 +25,10 @@ memory = Memory('data')
 def create_masks(img):
     img = np.uint8(match_histograms(img, BASELINE))
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    #spalling = cv2.inRange(hsv, SPALLING_LOWER, SPALLING_UPPER)
     _, _, v = cv2.split(hsv)
     v = clahe.apply(v)
     rubbing = cv2.inRange(v, RUBBING_LOWER, RUBBING_UPPER)
-    spalling = cv2.inRange(v, np.uint8([[225]]), np.uint8([[255]]))
+    spalling = cv2.inRange(v, SPALLING_LOWER, SPALLING_UPPER)
     return spalling, rubbing
 
 @memory.cache(verbose=0)

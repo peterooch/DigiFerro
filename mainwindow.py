@@ -4,9 +4,9 @@ import sys
 import json
 from typing import List
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget, QLabel, QMessageBox
 from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QIcon, QPixmap, QImage
+from PyQt5.QtGui import QIcon, QPixmap, QImage, QDropEvent
 import cv2
 import numpy as np
 
@@ -15,7 +15,7 @@ from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from login import LoginWindow
 from createAccount import CreateAccount
-from util import extract_dir, gen_graph, get_distribution, resource_path
+from util import extract_dir, gen_graph, get_distribution, resource_path, rubbing_precent
 #from graph import GraphWindow
 
 SETTINGS_PATH = 'settings.json'
@@ -24,6 +24,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.load_ui()
+
+        try:
+            with open(SETTINGS_PATH, 'r') as settings:
+                self.settings = json.load(settings)
+        except:
+            self.settings = dict()
+            with open(SETTINGS_PATH, 'w') as settings:
+                json.dump(self.settings, settings)
+
         self.login = LoginWindow(self)
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
@@ -34,14 +43,6 @@ class MainWindow(QMainWindow):
         self.totals_on = False
         self.graph_img = None
         self.prev_param = None
-
-        try:
-            with open(SETTINGS_PATH, 'r') as settings:
-                self.settings = json.load(settings)
-        except:
-            self.settings = dict()
-            with open(SETTINGS_PATH, 'w') as settings:
-                json.dump(self.settings, settings)
 
         # Menu Items
         self.actionUpload_file.triggered.connect(self.openfile.open)
@@ -67,12 +68,21 @@ class MainWindow(QMainWindow):
         lw.setDragEnabled(True)
         lw.dragEnterEvent = lambda e: e.acceptProposedAction()
         lw.dragMoveEvent = lambda e: e.acceptProposedAction()
-        lw.dropEvent = lambda e: self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls())))
+        lw.dropEvent = self.imagelist_drag_handler
 
         self.rectCBox.clicked.connect(lambda *args: self.show_image('refresh'))
 
     def load_ui(self):
         uic.loadUi(resource_path('mainwindow.ui'), self)
+
+    def imagelist_drag_handler(self, e: QDropEvent):
+        if self.imageList.count() == 0:
+            msgbox = QMessageBox(self)
+            msgbox.setWindowTitle('Error')
+            msgbox.setText('Please use "Analyze New Images" before attempting to drop new images')
+            msgbox.exec()
+        else:
+            self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls())))
 
     def list_selection(self, selected: QtCore.QItemSelection, deselected):
         self.image_id = selected.indexes()[0].row()
@@ -120,8 +130,12 @@ class MainWindow(QMainWindow):
         label: QLabel = self.label
         img_size = self.size()
         label_pos = label.pos()
-        img_size.setHeight(img_size.height() - label_pos.y() - 10)
-        img_size.setWidth(img_size.width() - label_pos.x() - 10)
+        if param & image.SHOW_GRAPH:
+            img_size.setHeight(img.shape[0])
+            img_size.setWidth(img.shape[1])
+        else:
+            img_size.setHeight(img_size.height() - label_pos.y() - 10)
+            img_size.setWidth(img_size.width() - label_pos.x() - 10)
         label.resize(img_size.width(), img_size.height())
         # resizing using QT instead of OpenCV
         img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format_BGR888).scaledToHeight(img_size.height())
@@ -143,7 +157,7 @@ class MainWindow(QMainWindow):
         if len(dims) == 0:
             return
         dims = np.concatenate(dims)
-        dist, bins = get_distribution(dims)
+        dist, bins = get_distribution(dims, 1) # FIXME get scale from dialog
         img = gen_graph(dist, bins)
         self.graph_img = img
         self.graph_data = dist, bins[1:]
@@ -201,6 +215,7 @@ class MainWindow(QMainWindow):
             self.images[self.image_id].save_image(file_path)
         else:
             cv2.imwrite(file_path, self.graph_img)
+
     def update_counts(self):
         if self.totals_on and self.graph_img is not None:        
             dist, bins = self.graph_data
@@ -211,6 +226,8 @@ class MainWindow(QMainWindow):
         # Fancify in future
         label: QLabel = self.fragmentLabel
         labelText = f"Fragment counts: {', '.join(f'{k}: {v}' for k,v in counts.items())}"
+        if not self.totals_on:
+            labelText += f", Rubbing: {rubbing_precent(self.images[self.image_id].rubbing):.2}%"
         label.resize(label.fontMetrics().boundingRect(labelText).size())
         label.setText(labelText)
 
