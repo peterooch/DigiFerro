@@ -43,7 +43,7 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="close">
+  <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
      <x>580</x>
@@ -56,7 +56,7 @@
     <string>Close</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="remove">
+  <widget class="QPushButton" name="removeButton">
    <property name="geometry">
     <rect>
      <x>450</x>
@@ -67,19 +67,6 @@
    </property>
    <property name="text">
     <string>Remove</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="edit">
-   <property name="geometry">
-    <rect>
-     <x>320</x>
-     <y>390</y>
-     <width>112</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Edit</string>
    </property>
   </widget>
  </widget>

@@ -15,7 +15,7 @@ from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from login import LoginWindow
 from createAccount import CreateAccount
-from usermanagement import UserManagement
+from usermanagement import ChangePassword, UserManagement
 from util import extract_dir, gen_graph, get_distribution, resource_path, rubbing_precent
 #from graph import GraphWindow
 
@@ -52,6 +52,7 @@ class MainWindow(QMainWindow):
         self.actionUpload_file_2.triggered.connect(self.load_history)
         self.create_new_account.triggered.connect(self.createnewacount.open)
         self.user_management.triggered.connect(self.UserManagement.show)
+        self.changePassword.triggered.connect(lambda *args: self.change_password(self.user))
         #self.actionShow_Graph.triggered.connect(self.graph.open)
         if sys.platform == "win32":
             self.actionHelp.triggered.connect(lambda *args: os.startfile(resource_path('DigiFerro_Guide.pdf')))
@@ -242,6 +243,11 @@ class MainWindow(QMainWindow):
         else:
             self.create_new_account.setVisible(False)
             self.user_management.setVisible(False)
+    
+    def change_password(self, user):
+        cp = ChangePassword(self, user)
+        cp.exec()
+        cp.close()
 
 # Custom class to enable custom sorting
 class ImageListWidgetItem(QListWidgetItem):

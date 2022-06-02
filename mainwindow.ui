@@ -201,7 +201,7 @@
     </property>
     <addaction name="user_management"/>
     <addaction name="create_new_account"/>
-    <addaction name="changepassword"/>
+    <addaction name="changePassword"/>
    </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuHistory"/>
@@ -254,7 +254,7 @@
     <string>Create New Acount</string>
    </property>
   </action>
-  <action name="changepassword">
+  <action name="changePassword">
    <property name="text">
     <string>Change Password</string>
    </property>

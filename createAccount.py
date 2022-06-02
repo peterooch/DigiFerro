@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5 import uic
 from util import resource_path
 from joblib import load, dump
+from usermanagement import add_user, User
 
 class CreateAccount(QDialog):
     def __init__(self, parent) -> None:
@@ -46,24 +47,7 @@ class CreateAccount(QDialog):
     def cancel(self):
         self.hide()
 
-class User:
-    def __init__(self, firstName, lastName, userName, passWord, role) -> None:
-        self.firstName = firstName
-        self.lastName = lastName
-        self.userName = userName
-        self.passWord = passWord
-        self.role = role
 
-# FIXME implement somesort of encryption
-USER_FILE = 'data/users.pkl'
-try:
-    users: List[User] = load(USER_FILE)
-except:
-    users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
-             User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
-             User('Chen', 'chef', 'Chen', '123456', 'Comptroller')]
-    dump(users, USER_FILE)
 
-def add_user(user: User):
-    users.append(user)
-    dump(users, USER_FILE)
+
+

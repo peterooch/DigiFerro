@@ -4,7 +4,8 @@ from xmlrpc.client import Boolean
 from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
 from PyQt5 import uic, QtCore
 from util import resource_path
-from createAccount import CreateAccount, User, users
+from createAccount import CreateAccount
+from usermanagement import User, users
 
 class LoginWindow(QDialog):
     def __init__(self, parent) -> None:
