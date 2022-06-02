@@ -170,7 +170,7 @@
      <x>0</x>
      <y>0</y>
      <width>1008</width>
-     <height>20</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -178,7 +178,6 @@
      <string>File</string>
     </property>
     <addaction name="actionUpload_file"/>
-    <addaction name="Create_New_Acount"/>
    </widget>
    <widget class="QMenu" name="menuHistory">
     <property name="title">
@@ -196,9 +195,18 @@
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuUsers">
+    <property name="title">
+     <string>Accounts</string>
+    </property>
+    <addaction name="user_management"/>
+    <addaction name="create_new_account"/>
+    <addaction name="changepassword"/>
+   </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuHistory"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuUsers"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionUpload_file">
@@ -234,6 +242,21 @@
   <action name="Create_New_Acount">
    <property name="text">
     <string>Create New Acount</string>
+   </property>
+  </action>
+  <action name="user_management">
+   <property name="text">
+    <string>User Management</string>
+   </property>
+  </action>
+  <action name="create_new_account">
+   <property name="text">
+    <string>Create New Acount</string>
+   </property>
+  </action>
+  <action name="changepassword">
+   <property name="text">
+    <string>Change Password</string>
    </property>
   </action>
  </widget>

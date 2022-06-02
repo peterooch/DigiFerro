@@ -15,6 +15,7 @@ from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from login import LoginWindow
 from createAccount import CreateAccount
+from usermanagement import UserManagement
 from util import extract_dir, gen_graph, get_distribution, resource_path, rubbing_precent
 #from graph import GraphWindow
 
@@ -37,6 +38,7 @@ class MainWindow(QMainWindow):
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
         self.createnewacount = CreateAccount(self)
+        self.UserManagement = UserManagement(self)
         #self.graph = GraphWindow(self)
         self.images: List[image] = []
         self.image_id = -1
@@ -48,7 +50,8 @@ class MainWindow(QMainWindow):
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.load_history)
-        self.Create_New_Acount.triggered.connect(self.createnewacount.open)
+        self.create_new_account.triggered.connect(self.createnewacount.open)
+        self.user_management.triggered.connect(self.UserManagement.show)
         #self.actionShow_Graph.triggered.connect(self.graph.open)
         if sys.platform == "win32":
             self.actionHelp.triggered.connect(lambda *args: os.startfile(resource_path('DigiFerro_Guide.pdf')))
@@ -234,9 +237,11 @@ class MainWindow(QMainWindow):
     def set_current_user(self, user):
         self.user = user
         if user.role == 'Confirm':
-            self.Create_New_Acount.setVisible(True)
+            self.create_new_account.setVisible(True)
+            self.user_management.setVisible(True)
         else:
-            self.Create_New_Acount.setVisible(False)
+            self.create_new_account.setVisible(False)
+            self.user_management.setVisible(False)
 
 # Custom class to enable custom sorting
 class ImageListWidgetItem(QListWidgetItem):
