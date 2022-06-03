@@ -178,6 +178,7 @@
      <string>File</string>
     </property>
     <addaction name="actionUpload_file"/>
+    <addaction name="actionAdvanced_settings"/>
    </widget>
    <widget class="QMenu" name="menuHistory">
     <property name="title">
@@ -257,6 +258,11 @@
   <action name="changePassword">
    <property name="text">
     <string>Change Password</string>
+   </property>
+  </action>
+  <action name="actionAdvanced_settings">
+   <property name="text">
+    <string>Advanced settings</string>
    </property>
   </action>
  </widget>

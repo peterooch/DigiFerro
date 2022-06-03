@@ -5,6 +5,7 @@ import json
 from typing import List
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget, QLabel, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QListWidgetItem, QListWidget, QLabel, QMessageBox
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QDropEvent
 import cv2
@@ -20,6 +21,14 @@ from util import extract_dir, gen_graph, get_distribution, resource_path, rubbin
 #from graph import GraphWindow
 
 SETTINGS_PATH = 'settings.json'
+
+class DiagnosticWindow(QDialog):
+    def __init__(self, parent) -> None:
+        super().__init__(parent)
+        self.load_ui()
+        print('Dummy')
+    def load_ui(self):
+        uic.loadUi(resource_path('diagnostic.ui', self))
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -39,6 +48,7 @@ class MainWindow(QMainWindow):
         self.history = HistoryWindow(self)
         self.createnewacount = CreateAccount(self)
         self.UserManagement = UserManagement(self)
+        self.diagnostics = DiagnosticWindow(self)
         #self.graph = GraphWindow(self)
         self.images: List[image] = []
         self.image_id = -1
@@ -56,6 +66,7 @@ class MainWindow(QMainWindow):
         #self.actionShow_Graph.triggered.connect(self.graph.open)
         if sys.platform == "win32":
             self.actionHelp.triggered.connect(lambda *args: os.startfile(resource_path('DigiFerro_Guide.pdf')))
+        self.actionAdvanced_settings.triggered.connect(lambda *args: self.diagnostics.show())
 
         # Window Buttons
         self.analyzeButton.clicked.connect(self.openfile.open)

@@ -7,6 +7,14 @@ from joblib import Memory
 
 from util import resource_path
 
+DEFAULTS = {
+    'SPALLING_MIN': [0, 0, 225],
+    'SPALLING_MAX': [255, 255, 255],
+    'RUBBING_MIN': [0, 0, 0],
+    'RUBBING_MAX': [255, 255, 100],
+    'DEFAULT_SCALE': 2,
+}
+
 # Spalling fragment hsv range
 SPALLING_LOWER = np.uint8([[225]])
 SPALLING_UPPER = np.uint8([[255]])
