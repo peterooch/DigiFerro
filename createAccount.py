@@ -16,7 +16,7 @@ class CreateAccount(QDialog):
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
 
     def load_ui(self):
-        uic.loadUi(resource_path('createacount.ui'), self)
+        uic.loadUi(resource_path('createaccount.ui'), self)
     
     def open(self):
         self.show()

@@ -239,9 +239,9 @@
     <string>DEMO: Show Graph</string>
    </property>
   </action>
-  <action name="Create_New_Acount">
+  <action name="Create_New_Account">
    <property name="text">
-    <string>Create New Acount</string>
+    <string>Create New Account</string>
    </property>
   </action>
   <action name="user_management">
@@ -251,7 +251,7 @@
   </action>
   <action name="create_new_account">
    <property name="text">
-    <string>Create New Acount</string>
+    <string>Create New Account</string>
    </property>
   </action>
   <action name="changePassword">

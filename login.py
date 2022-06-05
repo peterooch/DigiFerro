@@ -49,6 +49,6 @@ class LoginWindow(QDialog):
         msgBox.exec()
         return
 
-    def create_new_acount(self):
+    def create_new_account(self):
         self.createaccount = CreateAccount(self)
         self.createaccount.show()

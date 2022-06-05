@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.login = LoginWindow(self)
         self.openfile = OpenFileWindow(self)
         self.history = HistoryWindow(self)
-        self.createnewacount = CreateAccount(self)
+        self.createnewaccount = CreateAccount(self)
         self.UserManagement = UserManagement(self)
         #self.graph = GraphWindow(self)
         self.images: List[image] = []
@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
         self.actionUpload_file_2.triggered.connect(self.load_history)
-        self.create_new_account.triggered.connect(self.createnewacount.open)
+        self.create_new_account.triggered.connect(self.createnewaccount.open)
         self.user_management.triggered.connect(self.UserManagement.show)
         self.changePassword.triggered.connect(lambda *args: self.change_password(self.user))
         #self.actionShow_Graph.triggered.connect(self.graph.open)
