@@ -1,9 +1,11 @@
+from datetime import date, datetime
 from distutils.log import warn
 import os
 from typing import List
 
-from PyQt5.QtWidgets import QDialog, QTableWidget, QTableWidgetItem, QFileDialog, QHeaderView, QAbstractItemView, QMessageBox
+from PyQt5.QtWidgets import QDialog, QTableWidget, QTableWidgetItem, QFileDialog, QHeaderView, QAbstractItemView, QMessageBox, QDateEdit, QCalendarWidget, QPushButton
 from PyQt5 import uic
+from PyQt5.QtCore import QDate
 import pandas as pd
 from joblib import load, dump
 from Report import Report
@@ -28,11 +30,39 @@ class HistoryEntry:
     def __init__(self, obj) -> None:
         if type(obj) != Report:
             row = obj
-            self.date = row[1]
+
+            if type(row[1]) == datetime:
+                self.date = row[1].date()
+            elif type(row[1]) == str and row[1].count('.') == 2:
+                day, month, year = row[1].split('.')
+                self.date = date(int(year)+2000, int(month), int(day))
+            else:
+                self.date = row[1] # Faulty value
+
             self.tailnum = row[2]
             self.partnum = row[3]
             self.testnum = row[4]
-            self.flighthours = row[5]
+
+            hours = -1
+            if type(row[5]) == datetime:
+                initial_time = datetime(1900, 1, 1)
+                date_: datetime = row[5]
+                delta = date_ - initial_time
+                hours = delta.days * 24
+                hours += delta.seconds // 3600
+                hours += 48 # HACK Why though
+                minutes = delta.seconds // 60 % 60
+            elif type(row[5]) == str:
+                s = row[5].replace(';', ':').replace('.', ':')
+                if ':' in s:
+                    hours, minutes = s.split(':')[:2]
+                elif s.isnumeric():
+                    hours, minutes = s, 0
+            if hours != -1:
+                self.flighthours = f'{hours}:{minutes}'
+            else:
+                self.flighthours = row[5] # Faulty value
+
             self.result = row[6]
             self.extra_data = None
         else:
@@ -44,6 +74,11 @@ class HistoryEntry:
             self.flighthours = report.timeSinceOverhaul
             self.result = 'TBD' # FIXME
             self.extra_data = report
+
+        # FIXME Should be filled
+        self.spec_result = ''
+        self.conclusion = ''
+        self.sample_date: date = None
 
     def set_id(self, int_id):
         self._int_id = int_id
@@ -78,12 +113,17 @@ class History:
     def __init__(self, filename='') -> None:
         self._id_counter = 1
 
+        self.entries: List[HistoryEntry] = []
         if filename == '':
-            self.entries: List[HistoryEntry] = []
             return
 
         df = pd.read_excel(filename)
-        self.entries: List[HistoryEntry] = [HistoryEntry(row) for row in df.itertuples()]
+        for idx, row in enumerate(df.itertuples()):
+            try:
+                self.entries.append(HistoryEntry(row))
+            except ValueError:
+                print(f'Error with row {idx+1}, row values={row}')
+
         for entry in self.entries:
             self._set_int_id(entry)
     def __iter__(self):
@@ -126,7 +166,7 @@ class HistoryWindow(QDialog):
         try:
             self.history: History = load(HISTORY_PATH)
         except:
-            self.history: History = None
+            self.history: History = History('')
         self.partnums = set()
         self.selected_entries: List[HistoryEntry] = []
 
@@ -136,6 +176,7 @@ class HistoryWindow(QDialog):
         self.exportButton.clicked.connect(self.export)
         self.removeButton.clicked.connect(self.remove_entry)
         self.detailsButton.clicked.connect(self.details)
+        self.editButton.clicked.connect(self.edit)
 
         # Set up the table widget behavior
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -158,7 +199,7 @@ class HistoryWindow(QDialog):
         table: QTableWidget = self.tableWidget
         table.setRowCount(0) # Remove the other
         selected = self.comboBox.currentText()
-        self.selected_entries = [entry for entry in self.history if entry.partnum == selected]
+        self.selected_entries = sorted([entry for entry in self.history if entry.partnum == selected], key=lambda e: e.testnum)
         for i, entry in enumerate(self.selected_entries):
             table.insertRow(i)
             table.setItem(i, DATE_COL, QTableWidgetItem(str(entry.date)))
@@ -167,6 +208,9 @@ class HistoryWindow(QDialog):
             table.setItem(i, FLIGHTHOURS_COL, QTableWidgetItem(str(entry.flighthours)))
             table.setItem(i, ANALYSIS_COL, QTableWidgetItem(str(entry.result)))
             table.setItem(i, ENTRYID_COL, QTableWidgetItem(str(entry.id)))
+            table.setItem(i, CONCLUSION_COL, QTableWidgetItem(str(entry.conclusion)))
+            table.setItem(i, SPECRESULT_COL, QTableWidgetItem(str(entry.spec_result)))
+            table.setItem(i, SAMPLEDATE_COL, QTableWidgetItem(str(entry.sample_date)))
 
     def _get_selection(self):
         table: QTableWidget = self.tableWidget
@@ -192,6 +236,13 @@ class HistoryWindow(QDialog):
             return msgbox.exec()
 
         # FIXME implement showing of extra_data   
+
+    def edit(self):
+        entry = self.history[self._get_selection()]
+        editwindow = EditEntryWindow(self, entry)
+        editwindow.exec()
+        self._save_history()
+        self.part_selected()
 
     def _save_history(self):
         os.makedirs(HISTORY_FOLDER, exist_ok=True)
@@ -235,3 +286,92 @@ class HistoryWindow(QDialog):
         
         df = pd.DataFrame(data=rows, columns=headers)
         df.to_excel(file_path, encoding="utf-8", engine='openpyxl')
+
+class EditEntryWindow(QDialog):
+    def __init__(self, parent, entry: HistoryEntry):
+        '''
+        `HistoryEntry` CRUD Window
+        '''
+        super().__init__(parent)
+        self.parent = parent
+        self.load_ui()
+
+        self.updateButton.clicked.connect(self.update_entry)
+        # To copy object or not?
+        self.history_entry = entry
+
+        self.sampleLabel.setText(str(entry.testnum))
+        self.tailNumEdit.setText(str(entry.tailnum))
+        self.partNumEdit.setText(str(entry.partnum))
+        self.specEdit.setText(str(entry.spec_result))
+        self.analysisEdit.setText(str(entry.result))
+        self.concEdit.setText(str(entry.conclusion))
+
+        try:
+            self.dateEdit.setDate(QDate(entry.date.year, entry.date.month, entry.date.day))
+        except AttributeError:
+            self.dateEdit.setDate(QDate.currentDate())
+
+        if entry.sample_date is None:
+            self.sampleDateEdit.setDate(QDate.currentDate())
+        else:
+            d = entry.sample_date
+            self.sampleDateEdit.setDate(QDate(d.year, d.month, d.day))
+        
+        # Add calendars
+        self.add_calendar(self.dateEdit, self.dateButton)
+        self.add_calendar(self.sampleDateEdit, self.sampleDateButton)
+
+        try:
+            hours, minutes = entry.flighthours.split(':')
+            self.overhaulTimeEdit.setValue(float(f'{hours}.{minutes}'))
+        except:
+            pass
+    
+    def update_entry(self):
+        entry = self.history_entry
+        if self.tailNumEdit.text() != '':
+            entry.tailnum = self.tailNumEdit.text()
+        if self.partNumEdit.text() != '':
+            entry.partnum = self.partNumEdit.text()
+        if self.specEdit.text() != '':
+            entry.spec_result = self.specEdit.text()
+        if self.analysisEdit.text() != '':
+            entry.result = self.analysisEdit.text()
+        if self.concEdit.text() != '':
+            entry.conclusion = self.concEdit.text()
+        
+        # date
+        date_: QDate = self.dateEdit.date()
+        entry.date = date(date_.year(), date_.month(), date_.day())
+        # sample date
+        date_: QDate = self.sampleDateEdit.date()
+        entry.sample_date = date(date_.year(), date_.month(), date_.day())
+
+        hours, minutes = str(self.overhaulTimeEdit.value()).split('.')
+        entry.flighthours = f'{hours}:{minutes}'
+
+        self.close()
+
+    def add_calendar(self, dateEdit: QDateEdit, button: QPushButton):
+        # More generalized way to attach a calendar to a date field/button pair
+        # Code taken from openfile.py
+        calendar = QCalendarWidget(self)
+        calendar.hide()
+        rect = dateEdit.geometry()
+        calendar.move(self.size().width() - calendar.sizeHint().width(), rect.y() + rect.height())
+        calendar.selectionChanged.connect(lambda *args: dateEdit.setDate(calendar.selectedDate()))
+        button.clicked.connect(lambda *args: EditEntryWindow.toggle_calendar(calendar, dateEdit, button))
+
+    @staticmethod
+    def toggle_calendar(calendar: QCalendarWidget, dateEdit: QDateEdit, button: QPushButton):
+        if not calendar.isVisible():
+            calendar.setSelectedDate(dateEdit.date())
+            calendar.show()
+            button.setText("Hide Calendar")
+        else:
+            calendar.hide()
+            button.setText("Show Calendar")
+
+    def load_ui(self):
+        uic.loadUi(resource_path('history_edit.ui'), self)

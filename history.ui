@@ -156,7 +156,7 @@
     <string>Export to file</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="editButton">
    <property name="geometry">
     <rect>
      <x>760</x>

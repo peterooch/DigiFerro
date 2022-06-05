@@ -19,6 +19,9 @@ PyInstaller.__main__.run([
     '--add-data=graph.ui;.',
     '--add-data=login.ui;.',
     '--add-data=createaccount.ui;.',
+    '--add-data=changepassword.ui;.',
+    '--add-data=usermanagement.ui;.',
+    '--add-data=history_edit.ui;.',
     # Control image
     '--add-data=preprocess/baseline.jpg;preprocess',
     # Program Guide
