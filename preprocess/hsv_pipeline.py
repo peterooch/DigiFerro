@@ -3,35 +3,41 @@ from typing import List
 import cv2
 import numpy as np
 from skimage.exposure import match_histograms
-from joblib import Memory
+#from joblib import Memory
 
 from util import resource_path
 
 # Spalling fragment hsv range
-SPALLING_LOWER = np.uint8([[225]])
-SPALLING_UPPER = np.uint8([[255]])
+SPALLING_LOWER = np.uint8([[0, 230, 210]])
+SPALLING_UPPER = np.uint8([[255, 255, 255]])
 # Rubbing V Layer range
-RUBBING_LOWER = np.uint8([[0]])
-RUBBING_UPPER = np.uint8([[100]])
-
-# Create one clahe object for all images
-clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+RUBBING_LOWER = np.uint8([[0, 0, 0]])
+RUBBING_UPPER = np.uint8([[255, 255, 100]])
 
 # Histogram baseline image
 BASELINE = cv2.imread(resource_path('preprocess/baseline.jpg'))
 
-memory = Memory('data')
+#memory = Memory('data')
+
+def equalize_img(img):
+    return np.uint8(match_histograms(img, BASELINE))
+
+def apply_clahe(hsv):
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    h, s, v = cv2.split(hsv)
+    v = clahe.apply(v)
+    hsv = cv2.merge((h, s, v))
+    return hsv
 
 def create_masks(img):
-    img = np.uint8(match_histograms(img, BASELINE))
+    img = equalize_img(img)
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    _, _, v = cv2.split(hsv)
-    v = clahe.apply(v)
-    rubbing = cv2.inRange(v, RUBBING_LOWER, RUBBING_UPPER)
-    spalling = cv2.inRange(v, SPALLING_LOWER, SPALLING_UPPER)
+    hsv = apply_clahe(hsv)
+    # FIXME this should a bit more clever than just hardcoded ranges
+    spalling = cv2.inRange(hsv, SPALLING_LOWER, SPALLING_UPPER)
+    rubbing = cv2.inRange(hsv, RUBBING_LOWER, RUBBING_UPPER)
     return spalling, rubbing
 
-@memory.cache(verbose=0)
 def find_contours(mask):
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     return contours
@@ -63,7 +69,7 @@ def get_rects(mask, scale):
     cv2.drawContours(img, points, -1, CONTOUR_COLOR, 2)
     for pts in points:
         dim = np.linalg.norm(pts[0] - pts[2]) / scale
-        if dim < 20: # FIXME hardcoded value
+        if dim < 40: # FIXME hardcoded value
             continue
         text_pt = (0, 0)
         for pt in pts:

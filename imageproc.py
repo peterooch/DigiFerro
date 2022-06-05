@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from joblib import Parallel, delayed
 
-from preprocess.hsv_pipeline import contour_dims, create_masks, get_rects
+from preprocess.hsv_pipeline import apply_clahe, contour_dims, create_masks, equalize_img, get_rects
 from util import gen_graph, get_distribution
 
 BLACK_PIXEL = np.uint8([0, 0, 0])
@@ -28,15 +28,11 @@ class image:
       2. Overlay boxplots on the fragment mask or the image
       3. Saving graph/mask/original image to disk
     '''
-    SHOW_ORIGINAL  = (1 << 0)
-    SHOW_MASK      = (1 << 1)
-    SHOW_GRAPH     = (1 << 2)
-    SHOW_BOX_PLOTS = (1 << 3)
 
     __slots__ = ("scale", "filename", "img", "mask", "show_mode",
                  "drawed_image", "dims", "dist", "bins", "box_plots", "rubbing")
 
-    def __init__(self, image_path, scale=1):
+    def __init__(self, image_path, scale):
         with open(image_path, 'rb') as file:
             image_bytes = file.read()
         
@@ -44,7 +40,7 @@ class image:
         _, self.filename = path.split(image_path)
         self.img = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
         self.mask, self.rubbing = create_masks(self.img)
-        self.show_mode = 'original'
+        self.show_mode = image.SHOW_ORIGINAL
         self.drawed_image = None
 
         self.dims = contour_dims(self.mask)
@@ -68,6 +64,13 @@ class image:
 
         cv2.imwrite(filename, self.drawed_image)
 
+    # Flags for use with get_image
+    SHOW_ORIGINAL  = (1 << 0)
+    SHOW_MASK      = (1 << 1)
+    SHOW_GRAPH     = (1 << 2)
+    SHOW_BOX_PLOTS = (1 << 3)
+    SHOW_HSV       = (1 << 4)
+
     def get_image(self, option=None):
         if option is None:
             option = image.SHOW_ORIGINAL
@@ -87,6 +90,10 @@ class image:
         if option & image.SHOW_BOX_PLOTS:
             img = self.apply_box_plots(img)
 
+        if option & image.SHOW_HSV:
+            # For the HSV Debug option
+            img = apply_clahe(cv2.cvtColor(equalize_img(self.img), cv2.COLOR_BGR2HSV))
+
         self.drawed_image = img
         # img should be in BGR format
         return img
@@ -102,6 +109,6 @@ class image:
     def create_graph(self):
         return gen_graph(self.dist, self.bins)
 
-def paths_to_imgs(paths) -> List[image]:
+def paths_to_imgs(paths, scale) -> List[image]:
     # Use all but 1 core for image processing
-    return Parallel(n_jobs=-2, verbose=0, prefer='threads')(delayed(image)(path) for path in paths)
+    return Parallel(n_jobs=-2, verbose=0, prefer='threads')(delayed(image)(path, scale) for path in paths)

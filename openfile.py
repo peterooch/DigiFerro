@@ -102,11 +102,18 @@ class OpenFileWindow(QDialog):
         lw: QListWidget = self.imageList
         paths = [lw.item(i).text() for i in range(lw.count())]
 
-        self.parent.add_images(paths_to_imgs(paths))
+        self.parent.add_images(paths_to_imgs(paths, self.scale))
     
     def cancel(self):
         self.hide()
     
+    @property
+    def scale(self):
+        scale_ = float(self.scaleEdit.value())
+        if scale_ <= 0:
+            return 1.0
+        return scale_
+
     # Popout Calendar code
     def set_calendar(self):
         # Add calendar widget

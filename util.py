@@ -49,4 +49,4 @@ def get_distribution(dims, scale):
 def rubbing_precent(rubbing_mask):
     all_ones = np.ones_like(rubbing_mask)
     rubbing_ones = rubbing_mask / 255
-    return (rubbing_ones.sum() / all_ones.sum()) * 100 
+    return int((rubbing_ones.sum() / all_ones.sum()) * 100)

@@ -163,6 +163,22 @@
      <string>Show box plots</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="hsvDebugButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>610</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>DEBUG: Show HSV</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -170,7 +186,7 @@
      <x>0</x>
      <y>0</y>
      <width>1008</width>
-     <height>31</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

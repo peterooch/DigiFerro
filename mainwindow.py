@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetI
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QDropEvent
 import cv2
+from matplotlib import pyplot as plt
 import numpy as np
 
 from imageproc import image, paths_to_imgs
@@ -18,6 +19,7 @@ from createAccount import CreateAccount
 from usermanagement import ChangePassword, UserManagement
 from util import extract_dir, gen_graph, get_distribution, resource_path, rubbing_precent
 #from graph import GraphWindow
+from decisions import fragment_decision
 
 SETTINGS_PATH = 'settings.json'
 
@@ -76,17 +78,20 @@ class MainWindow(QMainWindow):
 
         self.rectCBox.clicked.connect(lambda *args: self.show_image('refresh'))
 
+        # DEBUG
+        self.hsvDebugButton.clicked.connect(self.hsv_debug)
+
     def load_ui(self):
         uic.loadUi(resource_path('mainwindow.ui'), self)
 
     def imagelist_drag_handler(self, e: QDropEvent):
-        if self.imageList.count() == 0:
+        if False: #self.imageList.count() == 0:
             msgbox = QMessageBox(self)
             msgbox.setWindowTitle('Error')
             msgbox.setText('Please use "Analyze New Images" before attempting to drop new images')
             msgbox.exec()
         else:
-            self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls())))
+            self.add_images(paths_to_imgs((url.path()[1:] for url in e.mimeData().urls()), self.openfile.scale))
 
     def list_selection(self, selected: QtCore.QItemSelection, deselected):
         self.image_id = selected.indexes()[0].row()
@@ -194,7 +199,10 @@ class MainWindow(QMainWindow):
     
     def show(self):
         self.showMaximized()
-        self.login.exec()
+        result = self.login.exec()
+        if result == 0:
+            pass
+            #sys.exit()
 
     def save_image(self):
         if self.image_id == -1:
@@ -231,7 +239,9 @@ class MainWindow(QMainWindow):
         label: QLabel = self.fragmentLabel
         labelText = f"Fragment counts: {', '.join(f'{k}: {v}' for k,v in counts.items())}"
         if not self.totals_on:
-            labelText += f", Rubbing: {rubbing_precent(self.images[self.image_id].rubbing):.2}%"
+            labelText += f", Rubbing: {rubbing_precent(self.images[self.image_id].rubbing)}%"
+        else:
+            labelText += f", Ferrography conclusion: {fragment_decision(dist)} hrs"
         label.resize(label.fontMetrics().boundingRect(labelText).size())
         label.setText(labelText)
 
@@ -248,6 +258,13 @@ class MainWindow(QMainWindow):
         cp = ChangePassword(self, user)
         cp.exec()
         cp.close()
+
+    def hsv_debug(self):
+        if self.image_id == -1:
+            return
+        img = self.images[self.image_id].get_image(image.SHOW_HSV)
+        plt.imshow(img)
+        plt.show()
 
 # Custom class to enable custom sorting
 class ImageListWidgetItem(QListWidgetItem):
@@ -267,4 +284,4 @@ if __name__ == "__main__":
     app.setWindowIcon(QIcon(resource_path('icon.png')))
     widget = MainWindow()
     widget.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
