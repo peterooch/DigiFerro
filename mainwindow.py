@@ -16,7 +16,7 @@ from openfile import OpenFileWindow
 from history import HistoryWindow, History
 from login import LoginWindow
 from createAccount import CreateAccount
-from usermanagement import ChangePassword, UserManagement
+from usermanagement import ChangePassword, User, UserManagement
 from util import extract_dir, gen_graph, get_distribution, resource_path, rubbing_precent
 #from graph import GraphWindow
 from decisions import fragment_decision
@@ -245,9 +245,9 @@ class MainWindow(QMainWindow):
         label.resize(label.fontMetrics().boundingRect(labelText).size())
         label.setText(labelText)
 
-    def set_current_user(self, user):
+    def set_current_user(self, user: User):
         self.user = user
-        if user.role == 'Confirm':
+        if user.role & User.ROLE_CONFIRM:
             self.create_new_account.setVisible(True)
             self.user_management.setVisible(True)
         else:

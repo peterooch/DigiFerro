@@ -27,13 +27,14 @@ class CreateAccount(QDialog):
         lastname = self.lastName.text()
         username = self.userName.text()
         password = self.password.text()
+        role = 0
         if self.performs.isChecked():
-            role = 'performs'
-        elif self.comptroller.isChecked():
-            role = 'comptroller'
-        elif self.confirm.isChecked():
-            role = 'confirm'
-        if firstname == '' or lastname == '' or username == '' or password == '' or role == '':
+            role |= User.ROLE_PERFORM
+        if self.comptroller.isChecked():
+            role |= User.ROLE_COMPTROLLER
+        if self.confirm.isChecked():
+            role |= User.ROLE_CONFIRM
+        if firstname == '' or lastname == '' or username == '' or password == '' or role == 0:
             msgBox.setText('All fields must be filled in as required')
             msgBox.exec()
         else: #User created successfully, user object must be created with all relevant variables.

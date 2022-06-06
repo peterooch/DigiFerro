@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QDialog, QHeaderView, QAbstractItemView, QMessageBox
@@ -5,13 +6,37 @@ from PyQt5 import uic
 from util import resource_path
 from joblib import load, dump
 
+class User:
+    # user flags
+    ROLE_PERFORM     = (1 << 0)
+    ROLE_COMPTROLLER = (1 << 1)
+    ROLE_CONFIRM     = (1 << 2)
+    def __init__(self, firstName, lastName, userName, passWord, role) -> None:
+        self.firstName = firstName
+        self.lastName = lastName
+        self.userName = userName
+        self.passWord = passWord
+        self.role = role
+        
+USER_FILE = 'data/users.pkl'
+try:
+    users: List[User] = load(USER_FILE)
+except:
+    users = [User('Dima', 'Fishman', 'Dima', '123456', User.ROLE_CONFIRM), 
+             User('Elizabeth', 'Riska', 'Eliz', '123456', User.ROLE_PERFORM),
+             User('Chen', 'chef', 'Chen', '123456', User.ROLE_COMPTROLLER)]
+    os.makedirs('data', exist_ok=True)
+    dump(users, USER_FILE)
+
+def add_user(user: User):
+    users.append(user)
+    dump(users, USER_FILE)
 
 
 FIRSTNAME_COL = 0
 LASTNAME_COL = 1
 USERNAME_COL = 2
 PASSWORD_COL = 3
-
 
 class UserManagement(QDialog):
     def __init__(self, parent) -> None:
@@ -83,30 +108,3 @@ class ChangePassword(QDialog):
         else:
             self.user.passWord = newPassword
             dump(users, USER_FILE)  
-
-            
-
-
-class User:
-    def __init__(self, firstName, lastName, userName, passWord, role) -> None:
-        self.firstName = firstName
-        self.lastName = lastName
-        self.userName = userName
-        self.passWord = passWord
-        self.role = role
-
-        
-USER_FILE = 'data/users.pkl'
-try:
-    users: List[User] = load(USER_FILE)
-except:
-    users = [User('Dima', 'Fishman', 'Dima', '123456', 'Confirm'), 
-             User('Elizabeth', 'Riska', 'Eliz', '123456', 'Opertaor'),
-             User('Chen', 'chef', 'Chen', '123456', 'Comptroller')]
-    dump(users, USER_FILE)
-
-def add_user(user: User):
-    users.append(user)
-    dump(users, USER_FILE)
-
-

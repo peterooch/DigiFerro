@@ -1,8 +1,6 @@
-from os import path
-from xmlrpc.client import Boolean
+from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5 import uic
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QCalendarWidget, QListWidget, QMessageBox
-from PyQt5 import uic, QtCore
 from util import resource_path
 from createAccount import CreateAccount
 from usermanagement import User, users
@@ -14,7 +12,7 @@ class LoginWindow(QDialog):
         self.load_ui()
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
-
+        self.setResult(1)
         #self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.WindowTitleHint | QtCore.Qt.CustomizeWindowHint)
 
     def load_ui(self):
@@ -27,27 +25,22 @@ class LoginWindow(QDialog):
         msgBox: QMessageBox = QMessageBox(self)
         userName = self.Username.text()  
         passWord = self.Password.text()
-        checkUser: Boolean = False
+        selected_user = None
         for user in users:
             if userName == user.userName and passWord == user.passWord:
-                checkUser = True
-                self.parent.set_current_user(user)
+                selected_user = user
                 break
-        if checkUser:
+        if selected_user is not None:
+            self.parent.set_current_user(selected_user)
             self.close()
-        else:
-            msgBox.setWindowTitle('Error')
-            msgBox.setText('Invalid credentials')
-            msgBox.exec()
-            return
-        x = self.Confirm.isChecked()
+        
+        msgBox.setWindowTitle('Error')
+        msgBox.setText('Invalid credentials')
+        msgBox.exec()
 
     def cancel(self):
-        msgBox: QMessageBox = QMessageBox(self)
-        msgBox.setWindowTitle('Error')
-        msgBox.setText('You must be logged in')
-        msgBox.exec()
-        return
+        self.setResult(0)
+        self.close()
 
     def create_new_account(self):
         self.createaccount = CreateAccount(self)
