@@ -8,7 +8,7 @@ from skimage.exposure import match_histograms
 from util import resource_path
 
 # Spalling fragment hsv range
-SPALLING_LOWER = np.uint8([[0, 230, 210]])
+SPALLING_LOWER = np.uint8([[0, 210, 210]])
 SPALLING_UPPER = np.uint8([[255, 255, 255]])
 # Rubbing V Layer range
 RUBBING_LOWER = np.uint8([[0, 0, 0]])
@@ -66,16 +66,16 @@ def get_rects(mask, scale):
     contours = find_contours(mask)
     img = np.zeros((*mask.shape, 3), np.uint8)
     points = [np.int0(cv2.boxPoints(cv2.minAreaRect(contour))) for contour in contours]
-    cv2.drawContours(img, points, -1, CONTOUR_COLOR, 2)
     for pts in points:
         dim = np.linalg.norm(pts[0] - pts[2]) / scale
-        if dim < 40: # FIXME hardcoded value
+        if dim < 75: # FIXME hardcoded value
             continue
         text_pt = (0, 0)
         for pt in pts:
             pt = tuple(pt)
             if pt >= text_pt:
                 text_pt = pt
+        cv2.drawContours(img, [pts], -1, CONTOUR_COLOR, 2)
         cv2.putText(img, f'{dim:.2f}', text_pt, cv2.FONT_HERSHEY_SIMPLEX, 0.75, TEXT_COLOR, 2)
     return img
 
