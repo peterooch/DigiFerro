@@ -354,7 +354,7 @@ class EditEntryWindow(QDialog):
         self.concEdit.setText(str(entry.conclusion))
 
         try:
-            self.dateEdit.setDate(date_to_qdate(entry.date.year))
+            self.dateEdit.setDate(date_to_qdate(entry.date))
         except AttributeError:
             self.dateEdit.setDate(QDate.currentDate())
 
