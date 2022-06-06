@@ -8,6 +8,11 @@ from imageproc import paths_to_imgs
 from util import resource_path
 from Report import Report
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 class OpenFileWindow(QDialog):
     def __init__(self, parent):
         super(OpenFileWindow, self).__init__(parent)

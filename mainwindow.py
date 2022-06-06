@@ -21,6 +21,13 @@ from util import extract_dir, gen_graph, get_distribution, resource_path, rubbin
 #from graph import GraphWindow
 from decisions import fragment_decision
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+# 
+# With cooperation with IAF
+
 SETTINGS_PATH = 'settings.json'
 
 class MainWindow(QMainWindow):

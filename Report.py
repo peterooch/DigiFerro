@@ -5,6 +5,11 @@ import pdfkit
 
 from util import resource_path
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 class Report:
     def __init__(self, squadron, hangar, sampleDate,timeSinceOverhaul, 
                 iron, titanium, otherMetals, scale, testNumber, tailNumber,

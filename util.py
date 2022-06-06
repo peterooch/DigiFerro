@@ -6,6 +6,11 @@ from matplotlib import pyplot as plt
 import cv2
 import numpy as np
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:

@@ -1,5 +1,10 @@
 import PyInstaller.__main__
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 # Not an integral part of the project
 # invoke this script to build the project
 

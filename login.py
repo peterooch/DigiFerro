@@ -5,6 +5,11 @@ from util import resource_path
 from createAccount import CreateAccount
 from usermanagement import User, users
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 class LoginWindow(QDialog):
     def __init__(self, parent) -> None:
         super(LoginWindow, self).__init__(parent)

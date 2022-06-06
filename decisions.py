@@ -1,4 +1,9 @@
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 # Bin indices
 SMALLER_THAN_75 = 0
 BETWEEN_75_105  = 1

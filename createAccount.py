@@ -7,6 +7,11 @@ from util import resource_path
 from joblib import load, dump
 from usermanagement import add_user, User
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 class CreateAccount(QDialog):
     def __init__(self, parent) -> None:
         super(CreateAccount, self).__init__(parent)

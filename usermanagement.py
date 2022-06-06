@@ -6,6 +6,11 @@ from PyQt5 import uic
 from util import resource_path
 from joblib import load, dump
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 class User:
     # user flags
     ROLE_PERFORM     = (1 << 0)

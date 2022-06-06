@@ -8,6 +8,11 @@ from joblib import Parallel, delayed
 from preprocess.hsv_pipeline import apply_clahe, contour_dims, create_masks, equalize_img, get_rects
 from util import gen_graph, get_distribution
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 BLACK_PIXEL = np.uint8([0, 0, 0])
 
 class image:

@@ -7,6 +7,11 @@ from skimage.exposure import match_histograms
 
 from util import resource_path
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 # Spalling fragment hsv range
 SPALLING_LOWER = np.uint8([[0, 210, 210]])
 SPALLING_UPPER = np.uint8([[255, 255, 255]])

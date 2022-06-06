@@ -12,6 +12,11 @@ from Report import Report
 
 from util import extract_dir, resource_path
 
+# DigiFerro
+# Programmers:
+# Baruch Rutman
+# Roi Amzallag
+
 DATE_COL = 0
 SAMPLEID_COL = 1
 SAMPLEDATE_COL = 2
