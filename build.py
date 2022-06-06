@@ -28,4 +28,6 @@ PyInstaller.__main__.run([
     '--add-data=DigiFerro_Guide.pdf;.',
     # PDF Exporter
     '--add-data=wkhtmltopdf.exe;.',
+    # Report HTML template
+    '--add-data=report_template.htm;.',
 ])

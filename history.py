@@ -66,7 +66,7 @@ class HistoryEntry:
             self.result = row[6]
             self.extra_data = None
         else:
-            report = obj
+            report: Report = obj
             self.date = report.sampleDate
             self.tailnum = report.tailNumber
             self.partnum = report.partNumber
@@ -95,7 +95,7 @@ class HistoryEntry:
             return self.date
         if label == "Tail Number":
             return self.tailnum
-        if label == "Flight Hours":
+        if label == "Time since overhaul":
             return self.flighthours
         if label == "Analysis Result":
             return self.result
@@ -105,6 +105,25 @@ class HistoryEntry:
             warn(f'FIXME: Requested Label "{label}" is not implemented')
             HistoryEntry.fixme_once.add(label)
         return "" # FIXME
+
+    def create_report(self) -> Report:
+        if self.extra_data is not None:
+            return self.extra_data
+        #FIXME
+        return Report(
+            '',
+            '',
+            self.date,
+            self.flighthours,
+            0,
+            0,
+            '',
+            '',
+            self.testnum,
+            self.tailnum,
+            self.partnum,
+            self.conclusion
+        )
 
 class History:
     '''
@@ -149,6 +168,8 @@ class History:
     def remove_entry(self, entry_id):
         self.entries.pop(self._get_index(entry_id))
     def __getitem__(self, entry_id):
+        if entry_id is None:
+            return None
         return self.entries[self._get_index(entry_id)]
 
 HISTORY_PATH = 'data/history.pkl'
@@ -177,6 +198,7 @@ class HistoryWindow(QDialog):
         self.removeButton.clicked.connect(self.remove_entry)
         self.detailsButton.clicked.connect(self.details)
         self.editButton.clicked.connect(self.edit)
+        self.reportButton.clicked.connect(self.gen_report)
 
         # Set up the table widget behavior
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -222,13 +244,19 @@ class HistoryWindow(QDialog):
         return table.item(item.row(), ENTRYID_COL).text()
 
     def remove_entry(self):
-        self.history.remove_entry(self._get_selection())
+        idx = self._get_selection()
+        if idx is None:
+            return
+        self.history.remove_entry(idx)
         self.part_selected()
         self._save_history()
 
     def details(self):
-        entry = self.history[self._get_selection()]
-        
+        idx = self._get_selection()
+        if idx is None:
+            return
+        entry = self.history[idx]
+
         if entry.extra_data is None:
             msgbox = QMessageBox(self)
             msgbox.setWindowTitle('DigiFerro')
@@ -238,7 +266,10 @@ class HistoryWindow(QDialog):
         # FIXME implement showing of extra_data   
 
     def edit(self):
-        entry = self.history[self._get_selection()]
+        idx = self._get_selection()
+        if idx is None:
+            return
+        entry = self.history[idx]
         editwindow = EditEntryWindow(self, entry)
         editwindow.exec()
         self._save_history()
@@ -286,6 +317,13 @@ class HistoryWindow(QDialog):
         
         df = pd.DataFrame(data=rows, columns=headers)
         df.to_excel(file_path, encoding="utf-8", engine='openpyxl')
+
+    def gen_report(self):
+        idx = self._get_selection()
+        if idx is None:
+            return
+        entry = self.history[idx]
+        entry.create_report().generateHtml().htmlTopdf().show_pdf()
 
 class EditEntryWindow(QDialog):
     def __init__(self, parent, entry: HistoryEntry):

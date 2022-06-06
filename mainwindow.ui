@@ -221,8 +221,8 @@
    </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuHistory"/>
-   <addaction name="menuHelp"/>
    <addaction name="menuUsers"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionUpload_file">

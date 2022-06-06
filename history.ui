@@ -133,9 +133,9 @@
   <widget class="QPushButton" name="detailsButton">
    <property name="geometry">
     <rect>
-     <x>660</x>
+     <x>649</x>
      <y>410</y>
-     <width>80</width>
+     <width>91</width>
      <height>21</height>
     </rect>
    </property>
@@ -146,14 +146,14 @@
   <widget class="QPushButton" name="exportButton">
    <property name="geometry">
     <rect>
-     <x>560</x>
+     <x>20</x>
      <y>410</y>
-     <width>80</width>
+     <width>141</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Export to file</string>
+    <string>Export history to file</string>
    </property>
   </widget>
   <widget class="QPushButton" name="editButton">
@@ -180,6 +180,19 @@
    </property>
    <property name="text">
     <string>Remove</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="reportButton">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>410</y>
+     <width>80</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Report</string>
    </property>
   </widget>
  </widget>
