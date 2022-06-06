@@ -10,7 +10,7 @@ import pandas as pd
 from joblib import load, dump
 from Report import Report
 
-from util import extract_dir, resource_path
+from util import extract_dir, qdate_to_date, resource_path
 
 # DigiFerro
 # Programmers:
@@ -77,7 +77,7 @@ class HistoryEntry:
             self.partnum = report.partNumber
             self.testnum = report.testNumber
             self.flighthours = report.timeSinceOverhaul
-            self.result = 'TBD' # FIXME
+            self.result = report.conclusion
             self.extra_data = report
 
         # FIXME Should be filled
@@ -330,6 +330,9 @@ class HistoryWindow(QDialog):
         entry = self.history[idx]
         entry.create_report().generateHtml().htmlTopdf().show_pdf()
 
+def date_to_qdate(d: date) -> QDate:
+    return QDate(d.year, d.month, d.day)
+
 class EditEntryWindow(QDialog):
     def __init__(self, parent, entry: HistoryEntry):
         '''
@@ -351,15 +354,14 @@ class EditEntryWindow(QDialog):
         self.concEdit.setText(str(entry.conclusion))
 
         try:
-            self.dateEdit.setDate(QDate(entry.date.year, entry.date.month, entry.date.day))
+            self.dateEdit.setDate(date_to_qdate(entry.date.year))
         except AttributeError:
             self.dateEdit.setDate(QDate.currentDate())
 
         if entry.sample_date is None:
             self.sampleDateEdit.setDate(QDate.currentDate())
         else:
-            d = entry.sample_date
-            self.sampleDateEdit.setDate(QDate(d.year, d.month, d.day))
+            self.sampleDateEdit.setDate(date_to_qdate(entry.sample_date))
         
         # Add calendars
         self.add_calendar(self.dateEdit, self.dateButton)
@@ -383,13 +385,9 @@ class EditEntryWindow(QDialog):
             entry.result = self.analysisEdit.text()
         if self.concEdit.text() != '':
             entry.conclusion = self.concEdit.text()
-        
-        # date
-        date_: QDate = self.dateEdit.date()
-        entry.date = date(date_.year(), date_.month(), date_.day())
-        # sample date
-        date_: QDate = self.sampleDateEdit.date()
-        entry.sample_date = date(date_.year(), date_.month(), date_.day())
+
+        entry.date = qdate_to_date(self.dateEdit.date())
+        entry.sample_date = qdate_to_date(self.sampleDateEdit.date())
 
         hours, minutes = str(self.overhaulTimeEdit.value()).split('.')
         entry.flighthours = f'{hours}:{minutes}'

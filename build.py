@@ -1,3 +1,5 @@
+import os
+
 import PyInstaller.__main__
 
 # DigiFerro
@@ -7,6 +9,9 @@ import PyInstaller.__main__
 
 # Not an integral part of the project
 # invoke this script to build the project
+
+# collect all *.ui files automatically
+ui_files = [f'--add-data={file};.' for file in os.listdir('.') if '.ui' in file]
 
 PyInstaller.__main__.run([
     'mainwindow.py',
@@ -18,15 +23,7 @@ PyInstaller.__main__.run([
     # Program icon
     '--add-data=icon.png;.',
     # Qt UI files
-    '--add-data=mainwindow.ui;.',
-    '--add-data=history.ui;.',
-    '--add-data=openfile.ui;.',
-    '--add-data=graph.ui;.',
-    '--add-data=login.ui;.',
-    '--add-data=createaccount.ui;.',
-    '--add-data=changepassword.ui;.',
-    '--add-data=usermanagement.ui;.',
-    '--add-data=history_edit.ui;.',
+    *ui_files,
     # Control image
     '--add-data=preprocess/baseline.jpg;preprocess',
     # Program Guide

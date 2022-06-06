@@ -1,3 +1,4 @@
+from datetime import date
 import sys
 from os import path
 import io
@@ -10,6 +11,8 @@ import numpy as np
 # Programmers:
 # Baruch Rutman
 # Roi Amzallag
+
+# THIS FILE SHOULD NOT IMPORTING ANYTHING ELSE FROM THE PROJECT
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -55,3 +58,6 @@ def rubbing_precent(rubbing_mask):
     all_ones = np.ones_like(rubbing_mask)
     rubbing_ones = rubbing_mask / 255
     return int((rubbing_ones.sum() / all_ones.sum()) * 100)
+
+def qdate_to_date(qdate):
+    return date(qdate.year(), qdate.month(), qdate.day())

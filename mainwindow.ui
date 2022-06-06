@@ -115,7 +115,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>470</y>
+      <y>440</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -137,19 +137,6 @@
      <string/>
     </property>
    </widget>
-   <!-- <widget class="QPushButton" name="addButton">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>440</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Add Images</string>
-    </property>
-   </widget> -->
    <widget class="QCheckBox" name="rectCBox">
     <property name="geometry">
      <rect>
@@ -177,6 +164,32 @@
     </property>
     <property name="text">
      <string>DEBUG: Show HSV</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addToHistoryButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>520</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save Result to History</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="showReportButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>480</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Report</string>
     </property>
    </widget>
   </widget>

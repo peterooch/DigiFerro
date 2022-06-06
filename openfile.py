@@ -5,7 +5,7 @@ from PyQt5.QtCore import QDate
 from PyQt5 import uic
 
 from imageproc import paths_to_imgs
-from util import resource_path
+from util import qdate_to_date, resource_path
 from Report import Report
 
 # DigiFerro
@@ -21,6 +21,8 @@ class OpenFileWindow(QDialog):
         self.pushButton.clicked.connect(self.browse)
         self.buttonBox.button(self.buttonBox.Ok).clicked.connect(self.ok)
         self.buttonBox.button(self.buttonBox.Cancel).clicked.connect(self.cancel)
+
+        self.ready = False
 
         date = QDate.currentDate()
         date_format = f'{str(date.day()).zfill(2)}{str(date.month()).zfill(2)}{date.year()}'
@@ -74,7 +76,7 @@ class OpenFileWindow(QDialog):
             msgBox.setText('please fill the hangar number')
             msgBox.show()
             return
-        sampleDate = self.sampleDateEdit.date()
+        sampleDate = qdate_to_date(self.sampleDateEdit.date())
         tailNumber = self.tailNumEdit.text()
         if (tailNumber == ''):
             msgBox.setText('please fill the tail number')
@@ -100,8 +102,10 @@ class OpenFileWindow(QDialog):
         scale = self.scaleEdit.value()
         report = Report(squadron, hangar, sampleDate, timeSinceOverhaul,
         iron, titanium, otherMetals, scale, testNumber,
-        tailNumber, partNumber, 80)
+        tailNumber, partNumber, None)
 
+        self.parent.set_report(report)
+        self.ready = True
         self.hide()
         # Image stuff
         lw: QListWidget = self.imageList

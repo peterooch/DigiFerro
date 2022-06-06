@@ -38,10 +38,10 @@ class LoginWindow(QDialog):
         if selected_user is not None:
             self.parent.set_current_user(selected_user)
             self.close()
-        
-        msgBox.setWindowTitle('Error')
-        msgBox.setText('Invalid credentials')
-        msgBox.exec()
+        else:
+            msgBox.setWindowTitle('Error')
+            msgBox.setText('Invalid credentials')
+            msgBox.exec()
 
     def cancel(self):
         self.setResult(0)

@@ -4,16 +4,17 @@ import sys
 import json
 from typing import List
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QListWidgetItem, QListWidget, QLabel, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileDialog, QListWidgetItem, QListWidget, QLabel, QMessageBox
 from PyQt5 import uic, QtCore
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QDropEvent
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
+from Report import Report
 
 from imageproc import image, paths_to_imgs
 from openfile import OpenFileWindow
-from history import HistoryWindow, History
+from history import HistoryEntry, HistoryWindow, History
 from login import LoginWindow
 from createAccount import CreateAccount
 from usermanagement import ChangePassword, User, UserManagement
@@ -48,13 +49,14 @@ class MainWindow(QMainWindow):
         self.history = HistoryWindow(self)
         self.createnewaccount = CreateAccount(self)
         self.UserManagement = UserManagement(self)
+        self.about = AboutWindow(self)
         #self.graph = GraphWindow(self)
         self.images: List[image] = []
         self.image_id = -1
         self.totals_on = False
         self.graph_img = None
         self.prev_param = None
-
+        self.report = None
         # Menu Items
         self.actionUpload_file.triggered.connect(self.openfile.open)
         self.actionShow_History.triggered.connect(self.history.open)
@@ -62,6 +64,7 @@ class MainWindow(QMainWindow):
         self.create_new_account.triggered.connect(self.createnewaccount.open)
         self.user_management.triggered.connect(self.UserManagement.show)
         self.changePassword.triggered.connect(lambda *args: self.change_password(self.user))
+        self.actionAbout.triggered.connect(lambda *args: self.about.show())
         #self.actionShow_Graph.triggered.connect(self.graph.open)
         if sys.platform == "win32":
             self.actionHelp.triggered.connect(lambda *args: os.startfile(resource_path('DigiFerro_Guide.pdf')))
@@ -73,6 +76,8 @@ class MainWindow(QMainWindow):
         self.graphButton.clicked.connect(lambda *args: self.show_image(image.SHOW_GRAPH))
         self.saveButton.clicked.connect(lambda *args: self.save_image())
         self.overallGraphButton.clicked.connect(lambda *args: self.show_totals())
+        self.showReportButton.clicked.connect(lambda *args: self.generate_report())
+        self.addToHistoryButton.clicked.connect(lambda *args: self.add_to_history())
 
         self.imageList.selectionChanged = self.list_selection
         # Set Drag n Drop
@@ -87,12 +92,13 @@ class MainWindow(QMainWindow):
 
         # DEBUG
         self.hsvDebugButton.clicked.connect(self.hsv_debug)
+        self.hsvDebugButton.hide()
 
     def load_ui(self):
         uic.loadUi(resource_path('mainwindow.ui'), self)
 
     def imagelist_drag_handler(self, e: QDropEvent):
-        if False: #self.imageList.count() == 0:
+        if not self.openfile.ready:
             msgbox = QMessageBox(self)
             msgbox.setWindowTitle('Error')
             msgbox.setText('Please use "Analyze New Images" before attempting to drop new images')
@@ -173,7 +179,7 @@ class MainWindow(QMainWindow):
         if len(dims) == 0:
             return
         dims = np.concatenate(dims)
-        dist, bins = get_distribution(dims, 1) # FIXME get scale from dialog
+        dist, bins = get_distribution(dims, self.openfile.scale)
         img = gen_graph(dist, bins)
         self.graph_img = img
         self.graph_data = dist, bins[1:]
@@ -273,6 +279,37 @@ class MainWindow(QMainWindow):
         plt.imshow(img)
         plt.show()
 
+    def set_report(self, report: Report):
+        self.report = report
+
+    def _get_dist(self):
+        lw: QListWidget = self.imageList
+        items = [lw.item(i) for i in range(lw.count())]
+        dims = []
+        for item in items:
+            if item.checkState() == QtCore.Qt.Unchecked:
+                continue
+            dims.append(item.attached_image.get_dims())
+        if len(dims) == 0:
+            return
+        dims = np.concatenate(dims)
+        dist, _ = get_distribution(dims, self.openfile.scale)
+        return dist
+
+    def generate_report(self):
+        if self.report is None:
+            return
+        dist = self._get_dist()
+        self.report.conclusion = fragment_decision(dist)
+        self.report.generateHtml().htmlTopdf().show_pdf()
+
+    def add_to_history(self):
+        if self.report is None:
+            return
+        dist = self._get_dist()
+        self.report.conclusion = fragment_decision(dist)
+        self.history.history.add_entry(HistoryEntry(self.report))
+
 # Custom class to enable custom sorting
 class ImageListWidgetItem(QListWidgetItem):
     @property
@@ -283,6 +320,13 @@ class ImageListWidgetItem(QListWidgetItem):
             return self.sort_key < other.sort_key
         except:
             return QListWidgetItem.__lt__(self, other)
+
+class AboutWindow(QDialog):
+    def __init__(self, parent) -> None:
+        super().__init__(parent)
+        uic.loadUi(resource_path('about.ui'), self)
+
+        self.closeButton.clicked.connect(lambda *args: self.hide())
 
 if __name__ == "__main__":
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>219</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>About</string>
+  </property>
+  <widget class="QPushButton" name="closeButton">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>180</y>
+     <width>80</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>371</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;DigiFerro&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Final project for Software Engineering degree,&lt;br/&gt;in cooperation with the Israeli Air Force&lt;/p&gt;&lt;p&gt;Programmers:&lt;br/&gt;Baruch Rutman&lt;br/&gt;Roi Amzallag&lt;br/&gt;&lt;br/&gt;This program uses the following libraries and programs (not exhaustive list):&lt;br/&gt;Python 3.9, PyQt5, OpenCV, scikit-image, NumPy, joblib, matplotlib,&lt;br/&gt;pandas, jinja2, pdfkit, wkhtmltopdf, PyInstaller&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
