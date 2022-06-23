@@ -212,10 +212,10 @@ class MainWindow(QMainWindow):
     
     def show(self):
         self.showMaximized()
-        result = self.login.exec()
-        if result == 0:
-            pass
-            #sys.exit()
+        self.login.exec()
+        # Test if a user got selected
+        if getattr(self, 'user', None) is None:
+            sys.exit()
 
     def save_image(self):
         if self.image_id == -1:
