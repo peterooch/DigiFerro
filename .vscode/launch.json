@@ -12,11 +12,20 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Build Project",
+            "name": "Python: Build Project (w/ Console)",
             "type": "python",
             "request": "launch",
             "program": "build.py",
-            "console": "integratedTerminal"
-        }
+            "console": "integratedTerminal",
+            "args": ["mainwindow.py"],
+        },
+        {
+            "name": "Python: Build Project (NoConsole)",
+            "type": "python",
+            "request": "launch",
+            "program": "build.py",
+            "console": "integratedTerminal",
+            "args": ["mainwindow.pyw"],
+        },
     ]
 }

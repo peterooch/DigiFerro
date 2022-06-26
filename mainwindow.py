@@ -328,7 +328,7 @@ class AboutWindow(QDialog):
 
         self.closeButton.clicked.connect(lambda *args: self.hide())
 
-if __name__ == "__main__":
+def main():
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     app = QApplication([])
@@ -336,3 +336,6 @@ if __name__ == "__main__":
     widget = MainWindow()
     widget.show()
     sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main()
