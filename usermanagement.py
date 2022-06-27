@@ -11,6 +11,8 @@ from joblib import load, dump
 # Baruch Rutman
 # Roi Amzallag
 
+DEBUG = True # Disable in production
+
 class User:
     # user flags
     ROLE_PERFORM     = (1 << 0)
@@ -30,6 +32,8 @@ except:
     users = [User('Dima', 'Fishman', 'Dima', '123456', User.ROLE_CONFIRM), 
              User('Elizabeth', 'Riska', 'Eliz', '123456', User.ROLE_PERFORM),
              User('Chen', 'chef', 'Chen', '123456', User.ROLE_COMPTROLLER)]
+    if DEBUG:
+        users.append(User('Admin', 'Admin', 'admin', 'admin', User.ROLE_CONFIRM))
     os.makedirs('data', exist_ok=True)
     dump(users, USER_FILE)
 
