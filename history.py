@@ -215,10 +215,11 @@ class HistoryWindow(QDialog):
         uic.loadUi(resource_path('history.ui'), self)
 
     def open(self):
-        if self.history is not None and len(self.partnums) == 0:
+        if self.history is not None:
             for entry in self.history:
-                self.partnums.add(entry.partnum)
-            self.comboBox.addItems(sorted(self.partnums))
+                if entry.partnum not in self.partnums:
+                    self.partnums.add(entry.partnum)
+                    self.comboBox.addItem(entry.partnum)
         self.part_selected()
         self.show()
 
@@ -226,7 +227,7 @@ class HistoryWindow(QDialog):
         table: QTableWidget = self.tableWidget
         table.setRowCount(0) # Remove the other
         selected = self.comboBox.currentText()
-        self.selected_entries = sorted([entry for entry in self.history if entry.partnum == selected], key=lambda e: e.testnum)
+        self.selected_entries = sorted([entry for entry in self.history if entry.partnum == selected], key=lambda e: int(e.testnum))
         for i, entry in enumerate(self.selected_entries):
             table.insertRow(i)
             table.setItem(i, DATE_COL, QTableWidgetItem(str(entry.date)))
@@ -329,6 +330,14 @@ class HistoryWindow(QDialog):
             return
         entry = self.history[idx]
         entry.create_report().generateHtml().htmlTopdf().show_pdf()
+    
+    def add_entry(self, entry: HistoryEntry):
+        self.history.add_entry(entry)
+        self._save_history()
+        if entry.partnum not in self.partnums:
+            self.partnums.add(entry.partnum)
+            self.comboBox.addItem(entry.partnum)
+            self.comboBox.setCurrentText(entry.partnum)
 
 def date_to_qdate(d: date) -> QDate:
     return QDate(d.year, d.month, d.day)

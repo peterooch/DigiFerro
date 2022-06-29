@@ -308,7 +308,8 @@ class MainWindow(QMainWindow):
             return
         dist = self._get_dist()
         self.report.conclusion = fragment_decision(dist)
-        self.history.history.add_entry(HistoryEntry(self.report))
+        self.history.add_entry(HistoryEntry(self.report))
+        self.history.open()
 
 # Custom class to enable custom sorting
 class ImageListWidgetItem(QListWidgetItem):
